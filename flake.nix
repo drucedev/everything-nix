@@ -13,10 +13,9 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nix-darwin, nixpkgs, home-manager, ... } @ inputs:
+  outputs = { self, nix-darwin, home-manager, ... }:
   let
     system = "x86_64-darwin";
-    pkgs = import nixpkgs { inherit system; };
   in
   {
     # Build darwin flake using:
