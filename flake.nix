@@ -25,7 +25,7 @@
       inherit system;
       modules = [ 
         ./configuration.nix
-        home-manager.darwinModule.home-manager {
+        home-manager.darwinModules.home-manager {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.druce = ./druce.nix;
