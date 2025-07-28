@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
     nixpkgs.config.allowUnfree = true;
@@ -14,6 +14,7 @@
     # $ nix-env -qaP | grep wget
     environment.systemPackages = with pkgs; [
         wget
+        brave
     ];
 
     # Necessary for using flakes on this system.

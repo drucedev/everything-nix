@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
     home = {
@@ -23,5 +23,6 @@
 
     home.packages = with pkgs; [
         nil
+        raycast
     ];
 }

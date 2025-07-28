@@ -1,0 +1,1 @@
+Manually disable spotlight shortcuts: https://manual.raycast.com/hotkey
