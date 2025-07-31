@@ -26,7 +26,7 @@
             settings = pkgs.lib.importTOML ./starship.toml;
         };
 
-        ghostty = {
+        wezterm = {
             enable = true;
             enableZshIntegration = true;
         };
