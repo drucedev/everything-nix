@@ -41,6 +41,7 @@
                 userSettings = {
                     "nix.enableLanguageServer" = true;
                     "nix.serverPath" = "nil";
+                    "git.enableSmartCommit" = true;
                 };
             };
         };
