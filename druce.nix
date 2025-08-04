@@ -9,6 +9,11 @@
 
        shell.enableZshIntegration = true;
 
+       file.".config/BraveSoftware/Brave-Browser/Default/Preferences".text = builtins.toJSON {
+            brave.update.enabled = false;
+        };
+
+
        packages = with pkgs; [
         nil
         raycast
