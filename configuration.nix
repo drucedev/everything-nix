@@ -36,4 +36,11 @@
 
     # Required for some settings like homebrew to know what user to apply to.
     system.primaryUser = "druce";
+
+    system.defaults = {
+        NSGlobalDomain.AppleICUForce24HourTime = true;
+        NSGlobalDomain.AppleShowAllExtensions = true;
+        loginwindow.GuestEnabled = false;
+        finder.FXPreferredViewStyle = "clmv";
+    };
 }
