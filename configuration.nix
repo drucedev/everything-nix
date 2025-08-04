@@ -33,4 +33,7 @@
 
     # The platform the configuration will be used on.
     nixpkgs.hostPlatform = "x86_64-darwin";
+
+    # Required for some settings like homebrew to know what user to apply to.
+    system.primaryUser = "druce";
 }

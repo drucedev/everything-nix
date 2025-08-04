@@ -20,6 +20,13 @@
        ];
     };
 
+    system.defaults = {
+        NSGlobalDomain.AppleICUForce24HourTime = true;
+        NSGlobalDomain.AppleShowAllExtensions = true;
+        loginwindow.GuestEnabled = false;
+        finder.FXPreferredViewStyle = "clmv";
+    };
+
     programs = {
         zsh = {
             enable = true;
