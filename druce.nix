@@ -45,10 +45,14 @@
                     tamasfe.even-better-toml
                 ];
                 userSettings = {
+                    "update.mode" = "none";
+
+                    "editor.fontSize" = 16;
+                    "editor.fontFamily" = "JetBrains Mono Nerd Font";
+
                     "nix.enableLanguageServer" = true;
                     "nix.serverPath" = "nil";
                     "git.enableSmartCommit" = true;
-                    "update.mode" = "none";
                 };
             };
         };
