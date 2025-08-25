@@ -5,33 +5,26 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     
     # Nix darwin
-    nix-darwin.url = "github:nix-darwin/nix-darwin/master";
-    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    darwin.url = "github:nix-darwin/nix-darwin/master";
+    darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nix-darwin, home-manager, ... }:
+  outputs = inputs @ { self, nixpkgs, darwin, home-manager, ... }:
   let
-    system = "x86_64-darwin";
+    vars = {
+      user = "druce";
+    };
   in
   {
-    # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#simple
-    darwinConfigurations."Odin" = nix-darwin.lib.darwinSystem {
-      inherit system;
-      modules = [ 
-        ./configuration.nix
-        home-manager.darwinModules.home-manager {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.druce = ./druce.nix;
-        }
-      ];
-    };
-
-    darwinPackages = self.darwinConfigurations."Odin".pkgs;
+    darwinConfigurations = (
+      import ./hosts/darwin {
+        inherit (nixpkgs) lib;
+        inherit inputs nixpkgs darwin home-manager vars;
+      }
+    );
   };
 }

@@ -1,8 +1,6 @@
 { pkgs, ... }:
 
 {
-    nixpkgs.config.allowUnfree = true;
-
     networking.hostName = "Odin";
 
     users.users.druce = {
