@@ -49,10 +49,10 @@
         ];
         
         NSGlobalDomain.AppleICUForce24HourTime = true;
-        NSGlobalDomain.AppleShowAllExtensions = true;
         
         loginwindow.GuestEnabled = false;
         
         finder.FXPreferredViewStyle = "clmv";
+        finder.AppleShowAllExtensions = true;
     };
 }
