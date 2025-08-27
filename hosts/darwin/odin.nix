@@ -24,7 +24,7 @@
 
     nix.gc = {
         automatic = true;
-        options = "--delete-older-than 30d";
+        options = "--delete-older-than 7d";
     };
 
     # Set Git commit hash for darwin-version.
