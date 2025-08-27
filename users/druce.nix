@@ -56,5 +56,9 @@
                 };
             };
         };
+
+        obsidian = {
+            enable = true;
+        };
     };
 }
