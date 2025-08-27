@@ -41,9 +41,18 @@
     system.primaryUser = "druce";
 
     system.defaults = {
+        dock.persistent-apps = [
+            "${pkgs.brave}/Applications/Brave Browser.app"
+            "${pkgs.wezterm}/Applications/WezTerm.app"
+            "${pkgs.vscode}/Applications/Visual Studio Code.app"
+            "${pkgs.obsidian}/Applications/Obsidian.app"
+        ];
+        
         NSGlobalDomain.AppleICUForce24HourTime = true;
         NSGlobalDomain.AppleShowAllExtensions = true;
+        
         loginwindow.GuestEnabled = false;
+        
         finder.FXPreferredViewStyle = "clmv";
     };
 }
