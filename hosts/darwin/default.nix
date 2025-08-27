@@ -1,4 +1,11 @@
-{ inputs, nixpkgs, darwin, home-manager, vars, ... }:
+{
+  inputs,
+  nixpkgs,
+  darwin,
+  home-manager,
+  vars,
+  ...
+}:
 let
   systemConfig = system: {
     system = system;
@@ -9,20 +16,28 @@ let
   };
 in
 {
-  Odin = 
+  Odin =
     let
       inherit (systemConfig "x86_64-darwin") system pkgs;
     in
-      darwin.lib.darwinSystem {
-        inherit system;
-        specialArgs = { inherit inputs system pkgs vars; };
-        modules = [ 
-          ./odin.nix
-          home-manager.darwinModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.druce = ./../../users/druce.nix;
-          }
-        ];
+    darwin.lib.darwinSystem {
+      inherit system;
+      specialArgs = {
+        inherit
+          inputs
+          system
+          pkgs
+          vars
+          ;
       };
+      modules = [
+        ./odin.nix
+        home-manager.darwinModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.druce = ./../../users/druce.nix;
+        }
+      ];
+    };
 }
