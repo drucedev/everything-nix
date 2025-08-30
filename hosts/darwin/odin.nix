@@ -37,6 +37,7 @@
     dock.show-recents = false;
 
     NSGlobalDomain.AppleICUForce24HourTime = true;
+    NSGlobalDomain."com.apple.keyboard.fnState" = true;
 
     loginwindow.GuestEnabled = false;
 
