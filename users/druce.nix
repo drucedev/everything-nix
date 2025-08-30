@@ -15,6 +15,7 @@
 
     packages = with pkgs; [
       nil
+      nixd
       nixfmt
       raycast
     ];
@@ -50,6 +51,19 @@
 
     obsidian = {
       enable = true;
+    };
+
+    zed-editor = {
+      enable = true;
+      extensions = [
+        "nix"
+        "catppuccin"
+      ];
+      extraPackages = with pkgs; [
+        nixd
+        nixfmt
+      ];
+      userSettings = builtins.fromJSON (builtins.readFile ./zed-settings.json);
     };
   };
 }

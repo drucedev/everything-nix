@@ -1,4 +1,9 @@
-{ pkgs, vars, lib, ... }:
+{
+  pkgs,
+  vars,
+  lib,
+  ...
+}:
 
 {
   # The platform the configuration will be used on.
