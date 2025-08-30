@@ -47,6 +47,7 @@
       "${pkgs.vscode}/Applications/Visual Studio Code.app"
       "${pkgs.obsidian}/Applications/Obsidian.app"
     ];
+    dock.show-recents = false;
 
     NSGlobalDomain.AppleICUForce24HourTime = true;
 
