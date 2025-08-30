@@ -14,7 +14,6 @@
     };
 
     packages = with pkgs; [
-      nil
       nixd
       nixfmt
       raycast
@@ -36,17 +35,6 @@
       enable = true;
       enableZshIntegration = true;
       extraConfig = builtins.readFile ./wezterm.lua;
-    };
-
-    vscode = {
-      enable = true;
-      profiles.default = {
-        extensions = with pkgs.vscode-extensions; [
-          jnoortheen.nix-ide
-          tamasfe.even-better-toml
-        ];
-        userSettings = builtins.fromJSON (builtins.readFile ./vscode-settings.json);
-      };
     };
 
     obsidian = {

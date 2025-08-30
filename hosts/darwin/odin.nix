@@ -36,7 +36,7 @@
     dock.persistent-apps = [
       "${pkgs.brave}/Applications/Brave Browser.app"
       "${pkgs.wezterm}/Applications/WezTerm.app"
-      "${pkgs.vscode}/Applications/Visual Studio Code.app"
+      "${pkgs.zed-editor}/Applications/Zed.app"
       "${pkgs.obsidian}/Applications/Obsidian.app"
     ];
     dock.show-recents = false;
