@@ -23,8 +23,29 @@
     }:
     let
       vars = {
-        user = "druce";
+        users = [
+          "druce"
+          "liza"
+        ];
       };
+      globals =
+        {
+          pkgs,
+          ...
+        }:
+        {
+          # Necessary for using flakes on this system.
+          nix.settings.experimental-features = "nix-command flakes";
+
+          nix.gc = {
+            automatic = true;
+            options = "--delete-older-than 7d";
+          };
+
+          environment.systemPackages = with pkgs; [
+            btop
+          ];
+        };
     in
     {
       darwinConfigurations = (
@@ -36,6 +57,7 @@
             darwin
             home-manager
             vars
+            globals
             ;
         }
       );

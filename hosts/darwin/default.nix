@@ -4,6 +4,7 @@
   darwin,
   home-manager,
   vars,
+  globals,
   ...
 }:
 let
@@ -28,9 +29,11 @@ in
           system
           pkgs
           vars
+          globals
           ;
       };
       modules = [
+        globals
         ./odin.nix
         home-manager.darwinModules.home-manager
         {
