@@ -2,9 +2,8 @@
   inputs,
   nixpkgs,
   darwin,
-  home-manager,
+  hm-unstable,
   vars,
-  globals,
   ...
 }:
 let
@@ -28,19 +27,14 @@ in
           inputs
           system
           pkgs
+          hm-unstable
           vars
-          globals
           ;
       };
       modules = [
-        globals
+        ./../../globals.nix
+        ./shared.nix
         ./odin.nix
-        home-manager.darwinModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.druce = ./../../users/druce.nix;
-        }
       ];
     };
 }

@@ -1,10 +1,11 @@
 {
-  pkgs,
   vars,
   lib,
   ...
 }:
-
+let
+  druce = builtins.elemAt vars.users 0;
+in
 {
   # The platform the configuration will be used on.
   nixpkgs.hostPlatform = "x86_64-darwin";
@@ -16,7 +17,7 @@
   system.stateVersion = 6;
 
   # Required for some settings like homebrew to know what user to apply to.
-  system.primaryUser = builtins.elemAt vars.users 0;
+  system.primaryUser = druce;
 
   users.users = lib.genAttrs vars.users (name: {
     inherit name;
@@ -24,29 +25,7 @@
     shell = "/bin/zsh";
   });
 
-  environment.systemPackages = with pkgs; [
-    brave
+  imports = [
+    ./../../users/druce
   ];
-
-  fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-  ];
-
-  system.defaults = {
-    dock.persistent-apps = [
-      "${pkgs.brave}/Applications/Brave Browser.app"
-      "${pkgs.wezterm}/Applications/WezTerm.app"
-      "${pkgs.zed-editor}/Applications/Zed.app"
-      "${pkgs.obsidian}/Applications/Obsidian.app"
-    ];
-    dock.show-recents = false;
-
-    NSGlobalDomain.AppleICUForce24HourTime = true;
-    NSGlobalDomain."com.apple.keyboard.fnState" = true;
-
-    loginwindow.GuestEnabled = false;
-
-    finder.FXPreferredViewStyle = "clmv";
-    finder.AppleShowAllExtensions = true;
-  };
 }

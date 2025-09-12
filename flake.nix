@@ -3,14 +3,17 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixos-stable.url = "github:NixOS/nixpkgs/nixos-25.05";
 
     # Nix darwin
     darwin.url = "github:nix-darwin/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     # Home manager
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    hm-unstable.url = "github:nix-community/home-manager";
+    hm-unstable.inputs.nixpkgs.follows = "nixpkgs";
+    hm-stable.url = "github:nix-community/home-manager";
+    hm-stable.inputs.nixpkgs.follows = "nixos-stable";
   };
 
   outputs =
@@ -18,7 +21,7 @@
       self,
       nixpkgs,
       darwin,
-      home-manager,
+      hm-unstable,
       ...
     }:
     let
@@ -28,24 +31,6 @@
           "liza"
         ];
       };
-      globals =
-        {
-          pkgs,
-          ...
-        }:
-        {
-          # Necessary for using flakes on this system.
-          nix.settings.experimental-features = "nix-command flakes";
-
-          nix.gc = {
-            automatic = true;
-            options = "--delete-older-than 7d";
-          };
-
-          environment.systemPackages = with pkgs; [
-            btop
-          ];
-        };
     in
     {
       darwinConfigurations = (
@@ -55,9 +40,8 @@
             inputs
             nixpkgs
             darwin
-            home-manager
+            hm-unstable
             vars
-            globals
             ;
         }
       );
