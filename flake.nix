@@ -18,7 +18,6 @@
 
   outputs =
     inputs@{
-      self,
       nixpkgs,
       darwin,
       hm-unstable,
