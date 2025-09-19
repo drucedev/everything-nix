@@ -3,7 +3,6 @@
   nixpkgs,
   darwin,
   hm-unstable,
-  vars,
   ...
 }:
 let
@@ -12,6 +11,7 @@ let
     pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
+      nixpkgs.hostPlatform = system;
     };
   };
 in
@@ -28,7 +28,6 @@ in
           system
           pkgs
           hm-unstable
-          vars
           ;
       };
       modules = [

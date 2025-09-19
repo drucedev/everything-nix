@@ -1,7 +1,5 @@
-{ pkgs, vars, ... }:
-let
-  druce = builtins.elemAt vars.users 0;
-in
+{ pkgs, ... }:
+
 {
   system.defaults = {
     dock.persistent-apps = [
@@ -12,5 +10,5 @@ in
     ];
   };
 
-  home-manager.users.${druce} = ./home.nix;
+  home-manager.users."druce" = ./home.nix;
 }

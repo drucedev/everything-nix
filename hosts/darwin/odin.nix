@@ -1,25 +1,26 @@
 {
-  vars,
   lib,
   ...
 }:
 let
-  druce = builtins.elemAt vars.users 0;
+  users = [
+    "druce"
+    "liza"
+  ];
+  primaryUser = builtins.elemAt users 0;
 in
 {
-  # The platform the configuration will be used on.
-  nixpkgs.hostPlatform = "x86_64-darwin";
-
   networking.hostName = "Odin";
 
-  # Used for backwards compatibility, please read the changelog before changing.
-  # $ darwin-rebuild changelog
-  system.stateVersion = 6;
+  system = {
+    # Required for some settings like homebrew to know what user to apply to.
+    inherit primaryUser;
+    # Used for backwards compatibility, please read the changelog before changing.
+    # $ darwin-rebuild changelog
+    stateVersion = 6;
+  };
 
-  # Required for some settings like homebrew to know what user to apply to.
-  system.primaryUser = druce;
-
-  users.users = lib.genAttrs vars.users (name: {
+  users.users = lib.genAttrs users (name: {
     inherit name;
     home = "/Users/${name}";
     shell = "/bin/zsh";
@@ -27,5 +28,6 @@ in
 
   imports = [
     ./../../users/druce
+    ./../../users/liza
   ];
 }

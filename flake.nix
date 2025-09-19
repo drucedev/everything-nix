@@ -24,14 +24,7 @@
       hm-unstable,
       ...
     }:
-    let
-      vars = {
-        users = [
-          "druce"
-          "liza"
-        ];
-      };
-    in
+
     {
       darwinConfigurations = (
         import ./hosts/darwin {
@@ -41,7 +34,6 @@
             nixpkgs
             darwin
             hm-unstable
-            vars
             ;
         }
       );
