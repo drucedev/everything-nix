@@ -8,8 +8,8 @@
       "catppuccin"
     ];
     extraPackages = with pkgs; [
-      nil
-      nixfmt
+      nixd
+      nixfmt-rfc-style
     ];
     userSettings = {
       auto_update = false;
@@ -18,19 +18,17 @@
       theme = "Catppuccin Mocha";
       editor = {
         font_family = "JetBrains Mono Nerd Font";
-        font_size = 18;
+        font_size = 20;
         line_height = 1.5;
       };
       lsp = {
-        nil = {
+        nixd = {
           settings = {
             formatting = {
               command = [ "nixfmt" ];
             };
-            nix = {
-              flake = {
-                autoEvalInputs = true;
-              };
+            nixpkgs = {
+              expr = ''import <nixpkgs> { }'';
             };
           };
         };
@@ -43,8 +41,8 @@
             };
           };
           language_servers = [
-            "!nixd"
-            "nil"
+            "nixd"
+            "!nil"
           ];
         };
       };
