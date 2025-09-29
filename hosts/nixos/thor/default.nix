@@ -78,13 +78,59 @@
     wofi
     git
     brave
+    discord
+    waybar
+    tuigreet
   ];
+
+  #  boot.kernelParams = [ "nvidia-drm.modeset=1" ];
+  #  environment.sessionVariables = {
+  #    "__GL_GSYNC_ALLOWED" = "1";
+  #    "__GL_MaxFramesAllowed" = "1";
+  #    "__GL_YIELD" = "usleep";
+  #  };
+
+  powerManagement.cpuFreqGovernor = "performance";
 
   fonts.enableDefaultPackages = true;
   fonts.packages = with pkgs; [ nerd-fonts.jetbrains-mono ];
 
   programs.hyprland.enable = true;
+  #  programs.hyprland.xwayland.enable = true;
   programs.ssh.startAgent = true;
+
+  programs.gamescope.enable = true;
+  programs.steam = {
+    enable = true;
+    #    gamescopeSession.enable = true;
+  };
+  programs.gamemode.enable = true;
+
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        user = "druce";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+      };
+    };
+  };
+
+  services.pipewire = {
+    enable = true;
+    #    alsa.enable = true;
+    #    pulse.enable = true;
+    #    jack.enable = true;
+  };
+
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.graphics.enable = true;
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = true;
+    open = true;
+  };
+  #  hardware.nvidia.forceFullCompositionPipeline = false;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
