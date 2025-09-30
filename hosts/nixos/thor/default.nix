@@ -81,6 +81,7 @@
     discord
     waybar
     tuigreet
+    kitty
   ];
 
   #  boot.kernelParams = [ "nvidia-drm.modeset=1" ];
