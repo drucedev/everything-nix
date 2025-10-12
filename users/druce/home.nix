@@ -15,6 +15,7 @@
       raycast
       lsd
       jetbrains-toolbox
+      nixd
     ];
   };
 
