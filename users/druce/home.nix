@@ -14,6 +14,7 @@
     packages = with pkgs; [
       raycast
       lsd
+      jetbrains-toolbox
     ];
   };
 
