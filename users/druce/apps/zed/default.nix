@@ -14,13 +14,12 @@
     userSettings = {
       auto_update = false;
       format_on_save = "on";
-      keymap = "JetBrains";
       theme = "Catppuccin Mocha";
-      editor = {
-        font_family = "JetBrains Mono Nerd Font";
-        font_size = 20;
-        line_height = 1.5;
-      };
+      base_keymap = "JetBrains";
+
+      buffer_font_family = "JetBrainsMono Nerd Font";
+      buffer_font_size = 18;
+
       lsp = {
         nixd = {
           settings = {
@@ -45,10 +44,13 @@
             "!nil"
           ];
         };
+        YAML = {
+          tab_size = 2;
+        };
       };
       telemetry = {
         metrics = false;
-        crash_reports = false;
+        diagnostics = false;
       };
     };
   };
