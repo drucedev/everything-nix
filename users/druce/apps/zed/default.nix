@@ -6,6 +6,7 @@
     extensions = [
       "nix"
       "catppuccin"
+      "lua"
     ];
     extraPackages = with pkgs; [
       nixd
