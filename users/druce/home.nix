@@ -16,6 +16,7 @@
       lsd
       jetbrains-toolbox
       nixd
+      nixfmt-rfc-style
     ];
   };
 
