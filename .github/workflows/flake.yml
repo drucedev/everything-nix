@@ -11,6 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
+          token: ${{ secrets.PAT }}
           fetch-depth: 0
 
       - uses: cachix/install-nix-action@fd24c48048070c1be9acd18c9d369a83f0fe94d7
