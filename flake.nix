@@ -36,16 +36,16 @@
             ;
         }
       );
-     
-     nixosConfigurations = (
-		import ./hosts/nixos {
-			inherit (nixpkgs) lib;
-			inherit
-				inputs
-				nixpkgs
-				hm-unstable
-				;
-		}
-	);
+
+      nixosConfigurations = (
+        import ./hosts/nixos {
+          inherit (nixpkgs) lib;
+          inherit
+            inputs
+            nixpkgs
+            hm-unstable
+            ;
+        }
+      );
     };
 }
