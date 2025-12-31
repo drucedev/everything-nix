@@ -1,7 +1,7 @@
 {
   inputs,
   nixpkgs,
-  hm-unstable,
+  hm,
   ...
 }:
 let
@@ -26,7 +26,7 @@ in
           inputs
           system
           pkgs
-          hm-unstable
+          hm
           ;
       };
       modules = [

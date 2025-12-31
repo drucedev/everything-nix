@@ -2,7 +2,7 @@
   inputs,
   nixpkgs,
   darwin,
-  hm-unstable,
+  hm,
   ...
 }:
 let
@@ -27,7 +27,7 @@ in
           inputs
           system
           pkgs
-          hm-unstable
+          hm
           ;
       };
       modules = [

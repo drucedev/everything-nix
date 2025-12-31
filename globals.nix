@@ -1,12 +1,24 @@
 {
   pkgs,
-  hm-unstable,
+  hm,
   ...
 }:
 
 {
-  # Necessary for using flakes on this system.
-  nix.settings.experimental-features = "nix-command flakes";
+
+  nix.settings = {
+    substituters = [
+      "https://cache.nixos.org/"
+    ];
+    trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+    ];
+    experimental-features = "nix-command flakes";
+    fallback = true;
+    max-jobs = "auto";
+  };
+
+  nix.optimise.automatic = true;
 
   nix.gc = {
     automatic = true;
@@ -18,12 +30,7 @@
   ];
 
   imports = [
-    (
-      if pkgs.stdenv.isDarwin then
-        hm-unstable.darwinModules.home-manager
-      else
-        hm-unstable.nixosModules.home-manager
-    )
+    (if pkgs.stdenv.isDarwin then hm.darwinModules.home-manager else hm.nixosModules.home-manager)
   ];
 
   home-manager.useGlobalPkgs = true;
