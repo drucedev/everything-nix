@@ -18,6 +18,7 @@
       nixd
       nixfmt
       pi-coding-agent
+      proton-pass-cli
     ];
   };
 
