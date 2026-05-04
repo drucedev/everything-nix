@@ -10,7 +10,7 @@
     ];
     extraPackages = with pkgs; [
       nixd
-      nixfmt-rfc-style
+      nixfmt
     ];
     userSettings = {
       auto_update = false;
@@ -28,7 +28,7 @@
               command = [ "nixfmt" ];
             };
             nixpkgs = {
-              expr = ''import <nixpkgs> { }'';
+              expr = "import <nixpkgs> { }";
             };
           };
         };
