@@ -16,7 +16,8 @@
       lsd
       jetbrains-toolbox
       nixd
-      nixfmt-rfc-style
+      nixfmt
+      pi-coding-agent
     ];
   };
 
