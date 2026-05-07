@@ -3,6 +3,7 @@
 {
   environment.systemPackages = with pkgs; [
     brave
+    proton-vpn
   ];
 
   fonts.packages = with pkgs; [
