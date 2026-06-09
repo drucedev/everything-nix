@@ -17,10 +17,10 @@
       jetbrains-toolbox
       nixd
       nixfmt
-      pi-coding-agent
       proton-pass-cli
       fd
       ripgrep
+      pnpm
     ];
   };
 
