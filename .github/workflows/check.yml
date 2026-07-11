@@ -1,0 +1,18 @@
+# Evaluates the whole flake (both hosts + perSystem outputs) on a Linux runner.
+# `--no-build` so it does not try to BUILD the darwin system on a Linux runner
+# (evaluating darwin derivations cross-platform is fine; building them is not).
+name: Check flake
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+
+      - uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3
+
+      - run: nix flake check --no-build -Lv
