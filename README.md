@@ -38,6 +38,7 @@ modules/                  auto-imported top-level modules
   fonts.nix               fonts.packages                      -> both bases (cross-class)
   packages/{cli,dev,gui}.nix  shared packages                 -> both bases (cross-class)
   formatter.nix           perSystem.formatter = nixfmt-tree
+  checks.nix              perSystem.checks: host packages must support the host OS (runs in CI)
   devshells/{default,kotlin,zig}.nix  perSystem.devShells.*
   nixos/base.nix          options.nixos.base (reusable NixOS base)
   nixos/thor.nix          options.nixos.thor; Thor identity + desktop stack (function form so pkgs is injected)
@@ -63,7 +64,8 @@ contributed by their own feature files — so `hosts.nix` never hardcodes them.
 
 ## Prerequisites
 
-- Nix with flakes (e.g. the [Determinate installer](https://github.com/DeterminateSystems/nix-installer)).
+- Nix with flakes (e.g. the [Determinate installer](https://github.com/DeterminateSystems/nix-installer)
+  in plain-Nix mode — nix-darwin manages the Nix config afterwards).
 - On macOS: also [nix-darwin](https://github.com/nix-darwin/nix-darwin) once Odin is set up.
 
 ## Bootstrap a clean NixOS machine (Thor)
@@ -171,5 +173,10 @@ push / pull request.
 
 ## Notes
 
+- Odin is x86_64-darwin, which nixpkgs supports up to and including 26.05
+  (the last release for that platform). Do NOT repoint the `nixpkgs` / `darwin`
+  inputs past their 26.05 branches — the daily flake.lock workflow only bumps
+  revisions within the pinned branches, which stays safe. Thor is unaffected
+  (it tracks nixos-unstable).
 - Manually disable Spotlight shortcuts that conflict with Raycast hotkeys: https://manual.raycast.com/hotkey
 - Nix install (Determinate): https://github.com/DeterminateSystems/nix-installer
