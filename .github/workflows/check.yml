@@ -1,6 +1,7 @@
-# Evaluates the whole flake (both hosts + perSystem outputs) on a Linux runner.
-# `--no-build` so it does not try to BUILD the darwin system on a Linux runner
-# (evaluating darwin derivations cross-platform is fine; building them is not).
+# Evaluates the flake on both host platforms (`nix flake check` skips outputs
+# of incompatible systems, so the legs are complementary). --no-build: nothing
+# is built on CI. macos-26-intel is the last x86_64-darwin label; if it queues
+# forever, enable billing/larger runners on the account.
 name: Check flake
 
 on:
@@ -9,7 +10,14 @@ on:
 
 jobs:
   check:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # A red leg must not cancel the other — their coverage differs.
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-26-intel
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
 
