@@ -5,15 +5,11 @@
 let
   cliPackages =
     pkgs: with pkgs; [
-      pnpm
-      nodejs
-
       lsd
       fd
       ripgrep
       fzf
       zoxide
-      git
       fastfetch
       proton-pass-cli
       stow

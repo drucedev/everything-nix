@@ -6,7 +6,11 @@ let
     pkgs: with pkgs; [
       nixd
       nixfmt
+
       pnpm
+      nodejs
+
+      git
     ];
 in
 {

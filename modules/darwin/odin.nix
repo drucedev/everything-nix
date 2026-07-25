@@ -32,7 +32,6 @@
       environment.systemPackages = with pkgs; [
         proton-vpn
         obsidian
-        jetbrains-toolbox
         raycast
       ];
 
@@ -40,7 +39,7 @@
         dock.show-recents = false;
         dock.persistent-apps = [
           "${pkgs.brave}/Applications/Brave Browser.app"
-          "${pkgs.wezterm}/Applications/WezTerm.app"
+          "${pkgs.wezterm}/Applications/Ghostty.app"
           "${pkgs.zed-editor}/Applications/Zed.app"
           "${pkgs.obsidian}/Applications/Obsidian.app"
         ];

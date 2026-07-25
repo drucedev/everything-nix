@@ -5,7 +5,6 @@ let
   guiPackages =
     pkgs: with pkgs; [
       brave
-      wezterm
       zed-editor
       ghostty-bin
     ];
