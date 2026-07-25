@@ -1,14 +1,6 @@
-# Thor — the NixOS host (x86_64-linux, nixpkgs-unstable). Holds Thor's identity +
-# hardware + unique desktop stack ONLY; the reusable `nixos.base` is imported
-# alongside this by modules/hosts.nix (not composed here), so both apply to the
-# system and merge naturally in the NixOS eval. Disk layout is in
-# nixos/thor/disk.nix (disko), non-disk hardware in nixos/thor/hardware.nix,
-# agenix identity in nixos/thor/agenix.nix; all merge into `nixos.thor` across
-# files via deferredModule.
-#
-# The config block is a FUNCTION `{ pkgs, ... }:` (not a bare attrset) so that
-# `pkgs` is injected by nixosSystem at import time — flake-parts does not
-# provide `pkgs` at the top-level module scope.
+# Thor — NixOS host (x86_64-linux, nixpkgs-unstable): identity + unique desktop
+# stack. Hardware/disk/agenix live in thor/*.nix; hosts.nix composes nixos.base
+# alongside. The config is a function so nixosSystem injects `pkgs`.
 {
   lib,
   ...
@@ -24,8 +16,8 @@
     { pkgs, ... }:
     {
       networking.hostName = "Thor";
-      # Do NOT change this after install — it pins NixOS migration behavior.
-      system.stateVersion = "25.05";
+      # Do NOT change after install — pins migration behavior.
+      system.stateVersion = "26.05";
 
       boot.loader.systemd-boot.enable = true;
       boot.loader.efi.canTouchEfiVariables = true;
@@ -81,8 +73,7 @@
         open = true;
       };
 
-      # Thor-specific desktop/GUI tools not shared with Odin. Shared GUI apps
-      # (brave, wezterm, zed-editor) come from modules/packages/gui.nix via base.
+      # Thor-specific desktop tools; shared apps come from packages/gui.nix via base.
       environment.systemPackages = with pkgs; [
         wofi
         waybar
