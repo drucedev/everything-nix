@@ -1,6 +1,6 @@
-# The ONLY file calling nixosSystem / darwinSystem. External modules (disko,
-# agenix) come in via config.nixos.modules / config.darwin.modules; nothing is
-# passed through specialArgs.
+# The ONLY file calling nixosSystem / darwinSystem. Thor's external modules
+# (disko, agenix) come in via config.nixos.modules; Odin's only one (agenix)
+# is listed directly. Nothing is passed through specialArgs.
 {
   inputs,
   config,
@@ -15,10 +15,9 @@
     description = "Extra NixOS modules to include in every nixosSystem eval (e.g. disko, agenix).";
   };
 
-  options.darwin.modules = lib.mkOption {
-    type = lib.types.listOf lib.types.deferredModule;
-    default = [ ];
-    description = "Extra nix-darwin modules to include in every darwinSystem eval (e.g. agenix).";
+  options.darwin.base = lib.mkOption {
+    type = lib.types.deferredModule;
+    default = { };
   };
 
   # Thor — NixOS on nixpkgs-unstable. hostPlatform is set in a module because
@@ -39,13 +38,13 @@
   # Odin — nix-darwin on stable nixpkgs. nix-darwin still accepts the `system` arg.
   config.flake.darwinConfigurations.Odin = inputs.darwin.lib.darwinSystem {
     system = "x86_64-darwin";
-    modules = config.darwin.modules ++ [
+    modules = [
+      inputs.agenix.darwinModules.default
       {
         imports = [
           config.darwin.base
           config.darwin.odin
           config.users.druce
-          config.users.liza
         ];
       }
     ];

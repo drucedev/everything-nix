@@ -1,6 +1,6 @@
 # Odin — nix-darwin host (x86_64-darwin, stable nixpkgs): identity + unique
-# settings. hosts.nix composes darwin.base and the users alongside. The config
-# is a function so darwinSystem injects `pkgs`.
+# settings. hosts.nix composes darwin.base alongside; druce comes from
+# users/druce.nix. The config is a function so darwinSystem injects `pkgs`.
 {
   lib,
   ...
@@ -20,12 +20,23 @@
       system.primaryUser = "druce";
       system.stateVersion = 6;
 
-      # Odin-specific; shared apps come from packages/*.nix via base.
+      # Odin's age key; generate: sudo age-keygen -o /etc/age/age-key (pubkey -> secrets.nix).
+      # Must be root-readable (darwin activation runs as root).
+      age.identityPaths = [ "/etc/age/age-key" ];
+
+      # Odin-specific; shared apps come from packages.nix via base.
       environment.systemPackages = with pkgs; [
         proton-vpn
         obsidian
         raycast
       ];
+
+      # Liza — login user on Odin only.
+      users.users.liza = {
+        name = "liza";
+        home = "/Users/liza";
+        shell = "/bin/zsh";
+      };
 
       system.defaults = {
         dock.show-recents = false;

@@ -31,24 +31,20 @@ modules/                  auto-imported top-level modules
   systems.nix             systems that perSystem is defined for
   hosts.nix               the ONLY file calling nixosSystem/darwinSystem; no specialArgs pass-thru
   users.nix               options.users = attrsOf deferredModule
-  users/druce.nix         druce's user record (branches NixOS vs darwin)
-  users/liza.nix          liza's user record (Odin only)
+  users/druce.nix         druce's user record (shared; host-only users live in the host file)
   nix.nix                 nix.settings / gc / optimise / btop  -> both bases (cross-class)
   nixpkgs.nix             nixpkgs.config.allowUnfree          -> both bases (cross-class)
   fonts.nix               fonts.packages                      -> both bases (cross-class)
-  packages/{cli,dev,gui}.nix  shared packages                 -> both bases (cross-class)
+  packages.nix            shared cli/dev/gui packages          -> both bases (cross-class)
   formatter.nix           perSystem.formatter = nixfmt-tree
   checks.nix              perSystem.checks: host packages must support the host OS (runs in CI)
-  devshells/{default,kotlin,zig}.nix  perSystem.devShells.*
+  devshells.nix           perSystem.devShells.{default,kotlin,zig}
   nixos/base.nix          options.nixos.base (reusable NixOS base)
   nixos/thor.nix          options.nixos.thor; Thor identity + desktop stack (function form so pkgs is injected)
   nixos/thor/{hardware,disk,agenix}.nix  Thor's hardware, disko layout, agenix identity
   nixos/disko.nix         pulls inputs.disko.nixosModules.disko into the eval
   nixos/agenix.nix        pulls inputs.agenix.nixosModules.default into the eval
-  darwin/base.nix         options.darwin.base (reusable darwin base)
-  darwin/odin.nix         options.darwin.odin; Odin identity + settings (function form so pkgs is injected)
-  darwin/odin/agenix.nix  Odin's agenix identity
-  darwin/agenix.nix       pulls inputs.agenix.darwinModules.default into the eval
+  darwin/odin.nix         options.darwin.odin; Odin identity + settings + liza user + agenix identity
 ```
 
 The pattern: `nixos.base` / `darwin.base` are `deferredModule` options whose
@@ -58,9 +54,9 @@ imports both the base and the host module into each system eval
 merge naturally. Host modules hold only their own identity + hardware + unique
 bits, as functions `{ pkgs, ... }:` so `pkgs` is injected by nixosSystem /
 darwinSystem at import time (flake-parts does not provide `pkgs` at the
-top-level module scope). External flake modules (disko, agenix) are
-pulled into the eval via `options.nixos.modules` / `options.darwin.modules`,
-contributed by their own feature files — so `hosts.nix` never hardcodes them.
+top-level module scope). Thor's external modules (disko, agenix) are pulled
+into the eval via `options.nixos.modules`, contributed by their own feature
+files; Odin's single one (agenix) is listed directly in `hosts.nix`.
 
 ## Prerequisites
 
@@ -169,7 +165,9 @@ push / pull request.
        { imports = [ config.nixos.base config.nixos.<name> config.users.<user> ]; } ];
    };
    ```
-4. If the host needs its own user, add `modules/users/<user>.nix` and import it.
+4. If the host needs a user shared with another host, add
+   `modules/users/<user>.nix` and import it; a host-only user goes directly in
+   the host file (like liza in `darwin/odin.nix`).
 
 ## Notes
 
