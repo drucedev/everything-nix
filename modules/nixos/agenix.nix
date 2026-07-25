@@ -1,5 +1,4 @@
-# Pulls the agenix NixOS module into the nixosSystem eval via the eval-time
-# module list. Per-host identityPaths live in nixos/thor/agenix.nix.
+# Pulls the agenix module into every nixosSystem eval (identityPaths per host).
 { inputs, ... }:
 
 {

@@ -1,18 +1,10 @@
-# Declarative disk layout for Thor (disko). This REPLACES the `fileSystems` /
-# `swapDevices` that used to live in hosts/nixos/thor/hardware-configuration.nix.
+# Declarative disk layout for Thor (disko); replaces fileSystems/swapDevices.
 #
-# TODO before first install:
-#   1. Set `device` to this machine's actual whole-disk path, e.g.
-#        /dev/disk/by-id/nvme-eui.0000000000000000...
-#      Find it with `lsblk -o NAME,LINKS`. NEVER point this at a partition.
-#   2. Adjust partition sizes to taste.
+# TODO before first install: set `device` to the actual whole-disk by-id path
+# (find it: lsblk -o NAME,LINKS). NEVER point it at a partition.
 #
-# Applied on a FRESH install with (see README for the full flow):
+# Fresh installs only — this reformats the disk:
 #   sudo nix run github:nix-community/disko#disko-install -- --flake .#Thor --disk main /dev/nvme0n1
-# (replace the disk; it must match `device` below). This is the flake-based form —
-# disk.nix is a module setting `config.nixos.thor`, NOT a standalone disko config, so
-# the `disko <file>` standalone form does not apply. Do NOT run disko's format step
-# against a disk you want to keep.
 { ... }:
 
 {

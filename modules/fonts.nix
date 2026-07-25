@@ -1,5 +1,4 @@
-# Fonts. `fonts.packages` exists on both NixOS and nix-darwin and is shared.
-# `fonts.enableDefaultPackages` is NixOS-only, so it goes on the NixOS base.
+# fonts.packages exists on both classes; fonts.enableDefaultPackages is NixOS-only.
 { ... }:
 
 let

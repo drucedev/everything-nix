@@ -1,13 +1,6 @@
-# The integration capstone: declares the eval-time module lists for each class
-# and produces the flake outputs `nixosConfigurations.Thor` and
-# `darwinConfigurations.Odin`.
-#
-# This is the ONLY file that calls `nixosSystem` / `darwinSystem`. It has `inputs`
-# in scope (a flake-parts module arg) and pulls external modules (disko, agenix)
-# in via `config.nixos.modules` / `config.darwin.modules` — contributed by their
-# own feature files. Lower-level modules only ever use the standard
-# `{ pkgs, config, lib, ... }` args; nothing is passed through `specialArgs`
-# (the dendritic `specialArgs` pass-thru anti-pattern is avoided).
+# The ONLY file calling nixosSystem / darwinSystem. External modules (disko,
+# agenix) come in via config.nixos.modules / config.darwin.modules; nothing is
+# passed through specialArgs.
 {
   inputs,
   config,
@@ -28,9 +21,8 @@
     description = "Extra nix-darwin modules to include in every darwinSystem eval (e.g. agenix).";
   };
 
-  # Thor — NixOS on nixpkgs-unstable. `nixpkgs.hostPlatform` is set in a module
-  # rather than via the `system` arg to nixosSystem (the `system` arg is
-  # deprecated on nixpkgs-unstable in favour of `nixpkgs.hostPlatform`).
+  # Thor — NixOS on nixpkgs-unstable. hostPlatform is set in a module because
+  # nixosSystem's `system` arg is deprecated on unstable.
   config.flake.nixosConfigurations.Thor = inputs.nixpkgs-unstable.lib.nixosSystem {
     modules = config.nixos.modules ++ [
       { nixpkgs.hostPlatform = "x86_64-linux"; }

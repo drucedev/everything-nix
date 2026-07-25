@@ -1,7 +1,5 @@
-# agenix identity for Odin (darwin). The age secret key must exist at this path;
-# generate it with `sudo age-keygen -o /etc/age/age-key` and record the matching
-# public key in ./secrets.nix (see README). nix-darwin activation runs as root,
-# so the key path must be root-readable.
+# Odin's age key; generate: sudo age-keygen -o /etc/age/age-key (pubkey -> secrets.nix).
+# Must be root-readable (darwin activation runs as root).
 { ... }:
 
 {

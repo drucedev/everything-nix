@@ -1,8 +1,5 @@
-# Cross-class nix configuration. `nix.settings`, `nix.optimise.automatic` and
-# `nix.gc` (using only `automatic` + `options`, which exist on BOTH NixOS and
-# nix-darwin — nix-darwin removed `dates`/`randomizedDelaySec`/`persistent`/
-# `user`, but this config uses none of those) are identical across both classes,
-# so a single `common` module is assigned to both bases.
+# Cross-class nix config. Uses only options existing on BOTH NixOS and
+# nix-darwin (nix-darwin lacks nix.gc.dates etc.), so one module serves both.
 { ... }:
 
 let

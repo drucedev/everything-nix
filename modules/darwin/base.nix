@@ -1,6 +1,4 @@
-# Declares the `darwin.base` deferredModule option. Its content is contributed by
-# the cross-class files (nix.nix, nixpkgs.nix, fonts.nix, packages/*); every
-# nix-darwin host composes `darwin.base` into itself.
+# The reusable darwin base; cross-class files (nix.nix, packages/*, ...) merge into it.
 { lib, ... }:
 
 {

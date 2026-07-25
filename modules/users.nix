@@ -1,5 +1,4 @@
-# Per-user modules. Each user is a deferredModule keyed by name; `modules/hosts.nix`
-# imports the relevant `config.users.<name>` into each host's eval.
+# Per-user modules (deferredModule keyed by name); hosts.nix imports them per host.
 { lib, ... }:
 {
   options.users = lib.mkOption {

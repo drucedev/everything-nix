@@ -25,8 +25,6 @@
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.inputs.darwin.follows = "darwin";
 
-    # NOTE: home-manager was removed. Dotfiles are managed with GNU stow in a
-    # separate repo; this flake only installs `stow` as a system package.
   };
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);

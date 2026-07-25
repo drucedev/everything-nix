@@ -1,6 +1,4 @@
-# Pulls the disko NixOS module into the nixosSystem eval via the eval-time
-# module list. The disko *config* (disko.devices) lives in nixos/thor/disk.nix;
-# this file only contributes the option-defining module.
+# Pulls the disko module into every nixosSystem eval (config lives in thor/disk.nix).
 { inputs, ... }:
 
 {

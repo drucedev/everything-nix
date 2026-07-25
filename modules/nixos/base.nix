@@ -1,6 +1,4 @@
-# Declares the `nixos.base` deferredModule option. Its content is contributed by
-# the cross-class files (nix.nix, nixpkgs.nix, fonts.nix, packages/*) and by the
-# nixos-base defaults below; every NixOS host composes `nixos.base` into itself.
+# The reusable NixOS base; cross-class files (nix.nix, packages/*, ...) merge into it.
 { lib, ... }:
 
 {
@@ -9,8 +7,7 @@
     default = { };
   };
 
-  # nixos-base defaults: zsh is enabled on every NixOS host so that
-  # `users.users.druce.shell = pkgs.zsh` (set in modules/users/druce.nix) resolves.
+  # Needed so users.users.druce.shell = pkgs.zsh resolves.
   config.nixos.base = {
     programs.zsh.enable = true;
   };

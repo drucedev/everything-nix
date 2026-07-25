@@ -1,5 +1,4 @@
-# Shared CLI tools installed on both hosts. `stow` is included so dotfiles
-# (managed in a separate GNU stow repo) can be deployed on any host.
+# Shared CLI tools; stow deploys dotfiles from the separate stow repo.
 { ... }:
 
 let

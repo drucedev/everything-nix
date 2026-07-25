@@ -1,6 +1,4 @@
-# Non-disk hardware for Thor — the bits of the old generated
-# `hardware-configuration.nix` that disko does NOT own (disko owns the mounts).
-# `nixpkgs.hostPlatform` is set in modules/hosts.nix, not here.
+# Non-disk hardware for Thor (disko owns the mounts).
 { ... }:
 
 {
