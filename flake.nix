@@ -5,6 +5,9 @@
     # Stable nixpkgs — used for nix-darwin (Odin) and perSystem dev tools.
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
 
+    # Linux-native stable nixpkgs — used for the NixOS server (Ivaldi).
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-26.05";
+
     # Unstable nixpkgs — used for the NixOS host (Thor).
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 

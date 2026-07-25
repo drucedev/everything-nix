@@ -7,10 +7,11 @@ auto-imported from `modules/` by [import-tree](https://github.com/denful/import-
 
 ## Hosts
 
-| Host  | Class      | nixpkgs           | System           |
-| ----- | ---------- | ----------------- | ---------------- |
-| Thor  | NixOS      | `nixos-unstable`  | `x86_64-linux`   |
-| Odin  | nix-darwin | `nixpkgs-26.05`   | `x86_64-darwin`  |
+| Host   | Class      | nixpkgs           | System           |
+| ------ | ---------- | ----------------- | ---------------- |
+| Thor   | NixOS      | `nixos-unstable`  | `x86_64-linux`   |
+| Ivaldi | NixOS      | `nixos-26.05`     | `x86_64-linux`   |
+| Odin   | nix-darwin | `nixpkgs-26.05`   | `x86_64-darwin`  |
 
 ## What this flake does and does not manage
 
@@ -42,6 +43,8 @@ modules/                  auto-imported top-level modules
   nixos/base.nix          options.nixos.base (reusable NixOS base)
   nixos/thor.nix          options.nixos.thor; Thor identity + desktop stack (function form so pkgs is injected)
   nixos/thor/{hardware,disk,agenix}.nix  Thor's hardware, disko layout, agenix identity
+  nixos/ivaldi.nix        options.nixos.ivaldi; Ivaldi (home server) identity, minimal scaffold
+  nixos/ivaldi/{hardware,disk,agenix}.nix  Ivaldi's hardware, disko layout, agenix identity
   nixos/disko.nix         pulls inputs.disko.nixosModules.disko into the eval
   nixos/agenix.nix        pulls inputs.agenix.nixosModules.default into the eval
   darwin/odin.nix         options.darwin.odin; Odin identity + settings + liza user + agenix identity

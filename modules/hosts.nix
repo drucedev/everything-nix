@@ -35,6 +35,20 @@
     ];
   };
 
+  # Ivaldi — small home server, NixOS on the Linux-native stable input.
+  config.flake.nixosConfigurations.Ivaldi = inputs.nixpkgs-stable.lib.nixosSystem {
+    modules = config.nixos.modules ++ [
+      { nixpkgs.hostPlatform = "x86_64-linux"; }
+      {
+        imports = [
+          config.nixos.base
+          config.nixos.ivaldi
+          config.users.druce
+        ];
+      }
+    ];
+  };
+
   # Odin — nix-darwin on stable nixpkgs. nix-darwin still accepts the `system` arg.
   config.flake.darwinConfigurations.Odin = inputs.darwin.lib.darwinSystem {
     system = "x86_64-darwin";
