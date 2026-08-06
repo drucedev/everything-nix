@@ -60,6 +60,7 @@ let
       brave
       zed-editor
       xwayland-satellite
+      xdg-user-dirs
       nautilus
       fuzzel
       swaylock
