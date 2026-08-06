@@ -58,6 +58,7 @@ let
 
       ghostty
       brave
+      zed-editor
       xwayland-satellite
       nautilus
       fuzzel
