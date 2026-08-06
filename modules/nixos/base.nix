@@ -1,4 +1,4 @@
-# The reusable NixOS base; cross-class files (nix.nix, packages/*, ...) merge into it.
+# The reusable NixOS base; shared NixOS configuration merges into it.
 { lib, ... }:
 
 {

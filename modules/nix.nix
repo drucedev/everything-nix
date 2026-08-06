@@ -4,7 +4,7 @@
 
 let
   common =
-    { pkgs, ... }:
+    { ... }:
     {
       nix.settings = {
         substituters = [ "https://cache.nixos.org/" ];
@@ -23,7 +23,6 @@ let
         options = "--delete-older-than 7d";
       };
 
-      environment.systemPackages = with pkgs; [ btop ];
     };
 in
 {

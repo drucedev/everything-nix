@@ -14,7 +14,13 @@
         "sd_mod"
       ];
       boot.initrd.kernelModules = [ ];
-      boot.kernelModules = [ "kvm-intel" ];
+      # Load NVIDIA DRM before the direct-DRM Gamescope greeter starts.
+      boot.kernelModules = [
+        "kvm-intel"
+        "nvidia"
+        "nvidia_modeset"
+        "nvidia_drm"
+      ];
       boot.extraModulePackages = [ ];
 
       networking.useDHCP = lib.mkDefault true;

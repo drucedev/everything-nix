@@ -19,7 +19,7 @@
           partitions = {
             ESP = {
               name = "ESP";
-              size = "512M";
+              size = "2G";
               type = "EF00";
               content = {
                 type = "filesystem";
@@ -29,12 +29,6 @@
                   "fmask=0077"
                   "dmask=0077"
                 ];
-              };
-            };
-            swap = {
-              size = "8G";
-              content = {
-                type = "swap";
               };
             };
             root = {

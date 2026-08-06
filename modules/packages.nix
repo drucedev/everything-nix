@@ -1,9 +1,6 @@
-# Shared packages installed on both hosts. Ghostty differs per class:
-# ghostty-bin is a darwin-only .dmg (fails to build on NixOS — modules/checks.nix
-# guards against this), pkgs.ghostty is the source build for Linux. Same for the
-# JDK: nixpkgs' JBR build is source-only and Linux-only, so Odin wraps
-# JetBrains' official jbrsdk binary (below). stow deploys dotfiles from the
-# separate stow repo.
+# Host-specific package sets. Keeping user-facing packages out of the shared
+# bases keeps Ivaldi server-like while preserving Odin's existing package set.
+# Dotfiles are managed by the separate stow repo.
 { ... }:
 
 let
@@ -37,6 +34,33 @@ let
     pkgs: with pkgs; [
       brave
       zed-editor
+    ];
+
+  # Keep Thor focused on the dotfiles and coding baseline; broader CLI and
+  # GUI tools remain available on Odin through the preserved package set.
+  thorPackages =
+    pkgs: with pkgs; [
+      btop
+      lsd
+      fd
+      ripgrep
+      fzf
+      zoxide
+      fastfetch
+      stow
+      starship
+
+      nixd
+      nixfmt
+      pnpm
+      nodejs
+      git
+
+      ghostty
+      brave
+      nautilus
+      fuzzel
+      swaylock
     ];
 
   # KMP needs JBR 25 with JetBrains' patches. nixpkgs' jetbrains.jdk builds
@@ -76,20 +100,14 @@ let
     });
 in
 {
-  config.nixos.base =
+  config.nixos.thor =
     { pkgs, ... }:
     {
-      environment.systemPackages =
-        cliPackages pkgs
-        ++ devPackages pkgs
-        ++ guiPackages pkgs
-        ++ [
-          pkgs.ghostty
-          pkgs.jetbrains.jdk
-        ];
+      environment.systemPackages = thorPackages pkgs;
     };
 
-  config.darwin.base =
+  # Preserve Odin's previous shared package set while keeping it out of Ivaldi.
+  config.darwin.odin =
     { pkgs, ... }:
     {
       environment.systemPackages =
@@ -97,6 +115,7 @@ in
         ++ devPackages pkgs
         ++ guiPackages pkgs
         ++ [
+          pkgs.btop
           pkgs.ghostty-bin
           (jbrsdk pkgs)
         ];

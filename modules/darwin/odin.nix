@@ -24,7 +24,7 @@
       # Must be root-readable (darwin activation runs as root).
       age.identityPaths = [ "/etc/age/age-key" ];
 
-      # Odin-specific; shared apps come from packages.nix via base.
+      # Odin-specific apps; the preserved shared package set comes from packages.nix.
       environment.systemPackages = with pkgs; [
         proton-vpn
         obsidian

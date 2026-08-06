@@ -19,8 +19,12 @@
       # Do NOT change after install — pins migration behavior.
       system.stateVersion = "26.05";
 
-      boot.loader.systemd-boot.enable = true;
       boot.loader.efi.canTouchEfiVariables = true;
+      boot.loader.limine = {
+        enable = true;
+        efiSupport = true;
+        maxGenerations = 10;
+      };
       boot.kernelPackages = pkgs.linuxPackages_latest;
 
       networking.networkmanager.enable = true;
@@ -47,23 +51,34 @@
 
       powerManagement.cpuFreqGovernor = "performance";
 
-      programs.hyprland.enable = true;
-      programs.ssh.startAgent = true;
+      programs.niri.enable = true;
+      programs.waybar.enable = true;
+      programs.xwayland.enable = true;
+      # Niri enables gnome-keyring's SSH agent; do not enable programs.ssh.startAgent too.
       programs.gamescope.enable = true;
       programs.steam.enable = true;
-      programs.gamemode.enable = true;
+
+      services.displayManager.defaultSession = "niri";
+      services.displayManager.regreet.enable = true;
 
       services.greetd = {
         enable = true;
         settings.default_session = {
-          user = "druce";
-          command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+          user = "greeter";
+          command = "${pkgs.dbus}/bin/dbus-run-session ${lib.getExe pkgs.gamescope} --backend drm --prefer-output DP-3 --force-windows-fullscreen -- ${lib.getExe pkgs.regreet}";
         };
       };
 
       services.udisks2.enable = true;
 
-      services.pipewire.enable = true;
+      services.pipewire = {
+        enable = true;
+        alsa.enable = true;
+        alsa.support32Bit = true;
+        pulse.enable = true;
+        wireplumber.enable = true;
+      };
+      security.rtkit.enable = true;
 
       services.xserver.videoDrivers = [ "nvidia" ];
       hardware.graphics.enable = true;
@@ -73,13 +88,7 @@
         open = true;
       };
 
-      # Thor-specific desktop tools; shared apps come from packages/gui.nix via base.
-      environment.systemPackages = with pkgs; [
-        wofi
-        waybar
-        tuigreet
-        kitty
-        discord
-      ];
+      # Thor's package set is contributed by packages.nix; desktop programs above
+      # add their own runtime packages.
     };
 }
