@@ -4,35 +4,50 @@ Druce's Nix flake for three machines: **Thor** (NixOS desktop, x86_64-linux),
 **Ivaldi** (NixOS home server, x86_64-linux), **Odin** (macOS + nix-darwin,
 x86_64-darwin).
 
-## Install Thor / Ivaldi (NixOS)
+## Install Thor (NixOS)
 
-From the NixOS minimal installer (flakes enabled):
+From the NixOS minimal installer (UEFI boot, flakes enabled):
 
 ```sh
-git clone <repo-url> && cd everything-nix
+# Keep the checkout outside /mnt; disko will use /mnt for the target system.
+git clone <repo-url> /tmp/everything-nix
+cd /tmp/everything-nix
 
-# 1. Inspect the target disk (lsblk -o NAME,LINKS,SIZE,TYPE,MODEL,SERIAL),
-#    then replace the TODO in modules/nixos/<host>/disk.nix with its exact
-#    whole-disk by-id path. Thor uses Limine, a 2 GiB EFI partition, ext4 root,
-#    and no swap; Ivaldi has its own layout.
+# Confirm this is the whole target disk, never a partition:
+lsblk -o NAME,PATH,SIZE,TYPE,MODEL,SERIAL,FSTYPE,MOUNTPOINTS
+readlink -f /dev/disk/by-id/nvme-KINGSTON_SKC3000D2048G_50026B768629E5B7
 
-# 2. Partition + format + install in one step (WARNING: reformats the disk;
-#    the device must match disk.nix):
-sudo nix run github:nix-community/disko#disko-install -- \
-  --flake .#Thor --disk main /dev/disk/by-id/REPLACE-WITH-THOR-DISK-ID
-# or: --flake .#Ivaldi --disk main /dev/disk/by-id/REPLACE-WITH-IVALDI-DISK-ID
+# 1. Destroy, partition, format, and mount Thor at /mnt.
+#    WARNING: this erases the disk configured in modules/nixos/thor/disk.nix.
+sudo nix run github:nix-community/disko#disko -- \
+  --mode destroy,format,mount \
+  --flake .#Thor
 
-# 3. Reboot, set the password:
-sudo passwd druce
-
-# 4. Secrets: generate the host age key, paste the printed PUBLIC key into
-#    secrets.nix under the host's name:
-sudo age-keygen -o /var/lib/agenix/age-key
+# 2. Install NixOS, set both passwords while /mnt is mounted, then reboot.
+#    nixos-install prompts for the root password.
+sudo nixos-install --flake .#Thor --root /mnt
+sudo nixos-enter --root /mnt -c 'passwd druce'
+cd /
+sudo umount -R /mnt
+sudo reboot
 ```
 
-Ivaldi only: after first boot, merge the `nixos-generate-config` hardware
-output into `modules/nixos/ivaldi/hardware.nix` (TODO there), and add druce's
-SSH `authorizedKeys` (openssh is enabled).
+The live-installer checkout is temporary. After first boot, clone a persistent
+checkout for future rebuilds:
+
+```sh
+git clone <repo-url> "$HOME/everything-nix"
+cd "$HOME/everything-nix"
+```
+
+No age key is needed for the initial Thor install. Configure agenix later when
+secrets are introduced.
+
+Ivaldi only: set its disk device in `modules/nixos/ivaldi/disk.nix` and use the
+same two phases with `.#Ivaldi`; its disk layout differs from Thor. After the
+first boot, merge the `nixos-generate-config` hardware output into
+`modules/nixos/ivaldi/hardware.nix` (TODO there), and add druce's SSH
+`authorizedKeys` (openssh is enabled).
 
 ## Install / update Odin (macOS)
 
