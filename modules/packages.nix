@@ -19,6 +19,7 @@ let
       stow
       starship
       forgejo-cli
+      gh
     ];
 
   devPackages =
