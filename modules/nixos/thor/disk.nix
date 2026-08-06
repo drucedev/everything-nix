@@ -1,18 +1,17 @@
 # Declarative disk layout for Thor (disko); replaces fileSystems/swapDevices.
 #
-# TODO before first install: set `device` to the actual whole-disk by-id path
-# (find it: lsblk -o NAME,LINKS). NEVER point it at a partition.
+# Thor's whole-disk by-id path; NEVER point it at a partition.
 #
-# Fresh installs only — this reformats the disk:
-#   sudo nix run github:nix-community/disko#disko-install -- --flake .#Thor --disk main /dev/nvme0n1
+# Fresh installs only — this destroys, formats, and mounts the disk:
+#   sudo nix run github:nix-community/disko#disko -- \
+#     --mode destroy,format,mount --flake .#Thor
 { ... }:
 
 {
   config.nixos.thor = {
     disko.devices = {
       disk.main = {
-        # TODO: replace with the real disk by-id path.
-        device = "/dev/disk/by-id/TODO-REPLACE-WITH-ACTUAL-DISK-ID";
+        device = "/dev/disk/by-id/nvme-KINGSTON_SKC3000D2048G_50026B768629E5B7";
         type = "disk";
         content = {
           type = "gpt";
