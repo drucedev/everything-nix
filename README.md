@@ -11,13 +11,16 @@ From the NixOS minimal installer (flakes enabled):
 ```sh
 git clone <repo-url> && cd everything-nix
 
-# 1. Set the disk device in modules/nixos/<host>/disk.nix — replace the TODO
-#    with the real whole-disk by-id path (find it: lsblk -o NAME,LINKS).
+# 1. Inspect the target disk (lsblk -o NAME,LINKS,SIZE,TYPE,MODEL,SERIAL),
+#    then replace the TODO in modules/nixos/<host>/disk.nix with its exact
+#    whole-disk by-id path. Thor uses Limine, a 2 GiB EFI partition, ext4 root,
+#    and no swap; Ivaldi has its own layout.
 
 # 2. Partition + format + install in one step (WARNING: reformats the disk;
 #    the device must match disk.nix):
-sudo nix run github:nix-community/disko#disko-install -- --flake .#Thor --disk main /dev/nvme0n1
-# or: --flake .#Ivaldi --disk main /dev/sda
+sudo nix run github:nix-community/disko#disko-install -- \
+  --flake .#Thor --disk main /dev/disk/by-id/REPLACE-WITH-THOR-DISK-ID
+# or: --flake .#Ivaldi --disk main /dev/disk/by-id/REPLACE-WITH-IVALDI-DISK-ID
 
 # 3. Reboot, set the password:
 sudo passwd druce
@@ -92,5 +95,6 @@ nix run github:ryantm/agenix -- -e mysecret.age
 ## Notes
 
 - Dotfiles are NOT managed here — separate [GNU stow](https://www.gnu.org/software/stow/)
-  repo; `stow` is installed on every host (`stow -t ~ <package>`).
+  repo; `stow` is installed on Odin and Thor (`stow -t ~ <package>`). Ivaldi's
+  user package set is deferred until its server role is designed.
 - Manually disable Spotlight shortcuts that conflict with Raycast hotkeys: https://manual.raycast.com/hotkey

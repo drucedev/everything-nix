@@ -15,8 +15,9 @@ the module system merges them.
 - `modules/hosts.nix` is the ONLY file calling `nixosSystem` / `darwinSystem`.
   Never pass `specialArgs`; modules use standard args only.
 - `options.<class>.base` and `options.<class>.<host>` are `deferredModule`s.
-  Cross-class files (`nix.nix`, `nixpkgs.nix`, `fonts.nix`, `packages.nix`)
-  contribute to BOTH bases; `hosts.nix` composes base + host + users per eval.
+  Cross-class settings (`nix.nix`, `nixpkgs.nix`) contribute to BOTH bases;
+  graphical packages and fonts contribute to their host modules so Ivaldi
+  remains a minimal server; `hosts.nix` composes base + host + users per eval.
 - Host modules are functions (`{ pkgs, ... }:` or `{ ... }:`) so
   nixosSystem/darwinSystem injects `pkgs` — flake-parts provides none at
   top-level module scope.
@@ -48,10 +49,10 @@ modules/                  auto-imported top-level modules
   hosts.nix               nixosSystem/darwinSystem calls + wiring options
   users.nix               options.users = attrsOf deferredModule
   users/druce.nix         druce (shared user; branches NixOS vs darwin)
-  nix.nix                 nix settings/gc/optimise + btop  -> both bases
+  nix.nix                 nix settings/gc/optimise       -> both bases
   nixpkgs.nix             allowUnfree                    -> both bases
-  fonts.nix               fonts.packages                 -> both bases
-  packages.nix            shared cli/dev/gui packages    -> both bases
+  fonts.nix               graphical fonts                -> Thor/Odin only
+  packages.nix            Thor packages + Odin preservation
   formatter.nix           perSystem.formatter
   checks.nix              perSystem.checks: host package platform guard
   devshells.nix           perSystem.devShells.{default,kotlin,zig}
