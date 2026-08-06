@@ -23,6 +23,7 @@
       boot.loader.limine = {
         enable = true;
         efiSupport = true;
+        efiInstallAsRemovable = true;
         maxGenerations = 10;
       };
       boot.kernelPackages = pkgs.linuxPackages_latest;
