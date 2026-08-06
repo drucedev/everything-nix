@@ -58,6 +58,7 @@ let
 
       ghostty
       brave
+      xwayland-satellite
       nautilus
       fuzzel
       swaylock
