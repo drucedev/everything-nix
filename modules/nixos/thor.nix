@@ -66,7 +66,7 @@
         enable = true;
         settings.default_session = {
           user = "greeter";
-          command = "${pkgs.dbus}/bin/dbus-run-session ${lib.getExe pkgs.gamescope} --backend drm --prefer-output DP-3 --force-windows-fullscreen -- ${lib.getExe pkgs.regreet}";
+          command = "${pkgs.dbus}/bin/dbus-run-session ${lib.getExe pkgs.gamescope} --backend drm --prefer-output DP-5 --force-windows-fullscreen -- ${lib.getExe pkgs.regreet}";
         };
       };
 
