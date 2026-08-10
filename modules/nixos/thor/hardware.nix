@@ -5,6 +5,8 @@
   config.nixos.thor =
     { config, lib, ... }:
     {
+      hardware.enableRedistributableFirmware = true;
+
       boot.initrd.availableKernelModules = [
         "xhci_pci"
         "ahci"
