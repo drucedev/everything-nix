@@ -1,6 +1,7 @@
-# Fail evaluation if a host's environment.systemPackages contains a package
-# that doesn't support the host's OS. CI is eval-only (--no-build), so wrong-OS
-# packages (ghostty-bin on Thor) would otherwise only fail at install time.
+# Fail evaluation if a host's environment.systemPackages or any user's
+# packages contain a package that doesn't support the host's OS. CI is
+# eval-only (--no-build), so wrong-OS packages (ghostty-bin on Thor) would
+# otherwise only fail at install time.
 #
 # Compared by OS family, not full system triple: nixpkgs arch annotations are
 # often stricter than reality (ghostty-bin declares aarch64-darwin only, yet
@@ -32,7 +33,12 @@ in
         name: host:
         let
           hostSystem = host.pkgs.stdenv.hostPlatform.system;
-          bad = unsupportedFor (osOf hostSystem) host.config.environment.systemPackages;
+          # Per-user delivery (users.users.<name>.packages) must obey the same
+          # OS guard as system packages.
+          hostPackages =
+            host.config.environment.systemPackages
+            ++ lib.concatMap (user: user.packages) (builtins.attrValues host.config.users.users);
+          bad = unsupportedFor (osOf hostSystem) hostPackages;
         in
         lib.optionalAttrs (system == hostSystem) {
           "${lib.toLower name}-supported-packages" =
@@ -40,7 +46,7 @@ in
               pkgs.runCommand "${lib.toLower name}-supported-packages" { } "touch $out"
             else
               throw ''
-                ${name}: environment.systemPackages do not support ${hostSystem}:
+                ${name}: system and user packages do not support ${hostSystem}:
                   ${builtins.concatStringsSep ", " (map (p: p.pname or p.name) bad)}
               '';
         }
