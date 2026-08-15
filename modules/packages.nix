@@ -15,7 +15,6 @@ let
       proton-pass-cli
       stow
       starship
-      forgejo-cli
       gh
     ];
 
@@ -46,7 +45,10 @@ let
       fastfetch
       stow
       starship
+      herdr
 
+      proton-pass-cli
+      gh
       pnpm
       nodejs
       git
