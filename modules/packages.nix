@@ -21,9 +21,6 @@ let
 
   devPackages =
     pkgs: with pkgs; [
-      nixd
-      nixfmt
-
       pnpm
       nodejs
 
@@ -50,8 +47,6 @@ let
       stow
       starship
 
-      nixd
-      nixfmt
       pnpm
       nodejs
       git
@@ -66,41 +61,6 @@ let
       swaylock
     ];
 
-  # KMP needs JBR 25 with JetBrains' patches. nixpkgs' jetbrains.jdk builds
-  # from source via Linux-only scripts (broken on darwin), but JetBrains still
-  # publishes official osx-x64 binaries — wrap jbrsdk, the full JDK.
-  jbrsdk =
-    pkgs:
-    pkgs.stdenvNoCC.mkDerivation (finalAttrs: {
-      pname = "jbrsdk";
-      version = "25.0.3-b508.16";
-
-      src = pkgs.fetchurl {
-        url = "https://cache-redirector.jetbrains.com/intellij-jbr/jbrsdk-25.0.3-osx-x64-b508.16.tar.gz";
-        hash = "sha256-cKMxc8ywAYInO5zLZX/9VeHf+1wB7Q6YEKw0Pauzsmo=";
-      };
-
-      # Signed Mach-O binaries; stripping would invalidate signatures.
-      dontStrip = true;
-
-      # Tarball has macOS bundle layout; Contents/Home is the JDK home.
-      installPhase = ''
-        runHook preInstall
-        mkdir -p $out
-        cp -R Contents/Home/. $out/
-        runHook postInstall
-      '';
-
-      passthru.home = finalAttrs.finalPackage;
-
-      meta = with pkgs.lib; {
-        description = "JetBrains Runtime SDK (official binary) — OpenJDK with JetBrains patches";
-        homepage = "https://github.com/JetBrains/JetBrainsRuntime";
-        license = pkgs.jdk.meta.license;
-        platforms = [ "x86_64-darwin" ];
-        mainProgram = "java";
-      };
-    });
 in
 {
   config.nixos.thor =
@@ -120,7 +80,6 @@ in
         ++ [
           pkgs.btop
           pkgs.ghostty-bin
-          (jbrsdk pkgs)
         ];
     };
 }
