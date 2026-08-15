@@ -85,10 +85,11 @@ and `nixpkgs-unstable` may advance.)
 ## Dev shells
 
 ```sh
-nix develop            # tools for editing this flake (nixd, nixfmt, git)
-nix develop .#kotlin
-nix develop .#zig
+nix develop            # tools for editing this flake (nixd, nixfmt)
 ```
+
+Language toolchains live in per-project flakes entered via direnv
+(`use flake` in a project's `.envrc`).
 
 ## Formatting & checks
 
