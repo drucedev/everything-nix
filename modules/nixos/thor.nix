@@ -59,6 +59,12 @@
       programs.gamescope.enable = true;
       programs.steam.enable = true;
 
+      # Per-project devshells enter via `use flake` .envrc files.
+      programs.direnv = {
+        enable = true;
+        nix-direnv.enable = true;
+      };
+
       services.displayManager.defaultSession = "niri";
       services.displayManager.regreet.enable = true;
 

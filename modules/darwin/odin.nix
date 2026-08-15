@@ -24,6 +24,12 @@
       # Must be root-readable (darwin activation runs as root).
       age.identityPaths = [ "/etc/age/age-key" ];
 
+      # Per-project devshells enter via `use flake` .envrc files.
+      programs.direnv = {
+        enable = true;
+        nix-direnv.enable = true;
+      };
+
       # Odin-specific apps; the preserved shared package set comes from packages.nix.
       environment.systemPackages = with pkgs; [
         proton-vpn
