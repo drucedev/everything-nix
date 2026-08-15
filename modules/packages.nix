@@ -43,6 +43,7 @@ let
       nautilus
       fuzzel
       swaylock
+      awww
     ];
 
   # System-wide on Odin: a launcher and a VPN tray are harmless for Liza, and
