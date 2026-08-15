@@ -30,9 +30,10 @@ shared options; they do not import one another.
 - Shared users live in `modules/users/<name>.nix`; host-only users live in the
   host module. Dotfiles are managed with GNU stow in a separate repository;
   do not reintroduce home-manager.
-- Thor's disko and agenix modules are contributed through
-  `config.nixos.modules`; Odin's agenix module is listed directly in
-  `hosts.nix`.
+- The disko and agenix NixOS modules are contributed through
+  `config.nixos.modules` (by `modules/nixos/disko.nix` and
+  `modules/nixos/agenix.nix`) into every NixOS eval — Thor and Ivaldi alike;
+  Odin's agenix module is listed directly in `hosts.nix`.
 
 ## Inputs and host roles
 
