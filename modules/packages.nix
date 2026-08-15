@@ -21,6 +21,7 @@ let
       git
       brave
       btop
+      neovim
     ];
 
   # Druce's GUI apps on both workstations: system-wide on Thor, per-user on
