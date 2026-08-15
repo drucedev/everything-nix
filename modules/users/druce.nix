@@ -1,5 +1,5 @@
 # Druce's user, imported by both hosts; branches by platform (NixOS-only flags
-# like isNormalUser don't exist on nix-darwin). Packages live in packages/*.
+# like isNormalUser don't exist on nix-darwin). Packages live in packages.nix.
 { ... }:
 
 {

@@ -30,13 +30,6 @@
         nix-direnv.enable = true;
       };
 
-      # Odin-specific apps; the preserved shared package set comes from packages.nix.
-      environment.systemPackages = with pkgs; [
-        proton-vpn
-        obsidian
-        raycast
-      ];
-
       # Liza — login user on Odin only.
       users.users.liza = {
         name = "liza";
