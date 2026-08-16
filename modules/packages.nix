@@ -10,6 +10,9 @@ let
       fd
       ripgrep
       fzf
+      curl
+      tree-sitter
+      (if stdenv.hostPlatform.isDarwin then clang else gcc)
       zoxide
       fastfetch
       proton-pass-cli
