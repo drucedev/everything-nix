@@ -26,7 +26,8 @@
         efiInstallAsRemovable = true;
         maxGenerations = 10;
       };
-      boot.kernelPackages = pkgs.linuxPackages_latest;
+      # Zen is tuned for desktop responsiveness and is available in nixpkgs.
+      boot.kernelPackages = pkgs.linuxPackages_zen;
 
       networking.networkmanager.enable = true;
 
