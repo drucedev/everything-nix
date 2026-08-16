@@ -42,6 +42,7 @@ let
   thorExtraPackages =
     pkgs: with pkgs; [
       herdr
+      discord
       xwayland-satellite
       xdg-user-dirs
       nautilus
