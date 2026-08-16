@@ -46,6 +46,7 @@ let
       grim
       slurp
       swaylock
+      wl-clipboard
       awww
     ];
 
