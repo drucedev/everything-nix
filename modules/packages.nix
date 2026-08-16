@@ -13,6 +13,7 @@ let
       zoxide
       fastfetch
       proton-pass-cli
+      cliamp
       stow
       starship
       gh
