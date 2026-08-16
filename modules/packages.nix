@@ -42,6 +42,8 @@ let
       xdg-user-dirs
       nautilus
       fuzzel
+      grim
+      slurp
       swaylock
       awww
     ];
