@@ -22,6 +22,11 @@
       boot.loader.systemd-boot.enable = true;
       boot.loader.efi.canTouchEfiVariables = true;
 
+      nix.gc = {
+        automatic = true;
+        options = "--delete-older-than 7d";
+      };
+
       networking.networkmanager.enable = true;
 
       time.timeZone = "Europe/Berlin";
