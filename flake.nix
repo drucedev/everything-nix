@@ -28,6 +28,11 @@
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.inputs.darwin.follows = "darwin";
 
+    # llm-agents — pi coding agent (Thor only). No `follows`: the flake is only
+    # tested against its pinned nixpkgs-unstable, and keeping it independent
+    # preserves prebuilt binaries from numtide's binary cache.
+    llm-agents.url = "github:numtide/llm-agents.nix";
+
   };
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);

@@ -1,6 +1,6 @@
 # Single registry for user-facing packages. Ivaldi stays deliberately headless
 # and gets nothing from here. Dotfiles are managed by the separate stow repo.
-{ ... }:
+{ inputs, ... }:
 
 let
   # Everyone on both workstations, delivered system-wide.
@@ -53,6 +53,10 @@ let
       wl-clipboard
       awww
       vintagestory
+      # pi coding agent from numtide/llm-agents while trying it out. The input
+      # pins its own nixpkgs (no `follows`), so the package is referenced by
+      # literal system; Thor is x86_64-linux per hosts.nix.
+      inputs.llm-agents.packages.x86_64-linux.pi
     ];
 
   # System-wide on Odin: a launcher and a VPN tray are harmless for Liza, and
