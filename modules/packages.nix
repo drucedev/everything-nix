@@ -73,6 +73,14 @@ in
     { pkgs, ... }:
     {
       environment.systemPackages = sharedPackages pkgs ++ druceApps pkgs ++ thorExtraPackages pkgs;
+
+      # Prebuilt llm-agents packages come from numtide's cache. Set system-wide
+      # because a flake's nixConfig is only honored when interactively accepted
+      # per command.
+      nix.settings.extra-substituters = [ "https://cache.numtide.com" ];
+      nix.settings.extra-trusted-public-keys = [
+        "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+      ];
     };
 
   config.darwin.odin =
