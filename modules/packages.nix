@@ -20,8 +20,6 @@ let
       stow
       starship
       gh
-      pnpm
-      nodejs
       git
       brave
       btop
@@ -60,11 +58,14 @@ let
     ];
 
   # System-wide on Odin: a launcher and a VPN tray are harmless for Liza, and
-  # raycast needs Launch Services visibility.
+  # raycast needs Launch Services visibility. nodejs/pnpm stay Odin-only: Thor
+  # dropped them once pi came from llm-agents.
   odinSystemApps =
     pkgs: with pkgs; [
       raycast
       proton-vpn
+      nodejs
+      pnpm
     ];
 
 in
