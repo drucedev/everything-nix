@@ -6,7 +6,11 @@ let
   common =
     { ... }:
     {
-      nix.settings.experimental-features = "nix-command flakes";
+      # Newer nixpkgs types experimental-features strictly as a list of strings.
+      nix.settings.experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
 
       nix.optimise.automatic = true;
     };
