@@ -21,6 +21,7 @@ let
       starship
       mise
       python3
+      gnumake
       gh
       git
       brave
