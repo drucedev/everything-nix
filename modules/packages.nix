@@ -20,6 +20,7 @@ let
       stow
       starship
       mise
+      python3
       gh
       git
       brave
