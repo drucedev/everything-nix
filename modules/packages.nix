@@ -19,6 +19,7 @@ let
       cliamp
       stow
       starship
+      mise
       gh
       git
       brave
