@@ -43,7 +43,6 @@ let
   # sharedPackages: it does not exist on Odin's 26.05-darwin channel.
   thorExtraPackages =
     pkgs: with pkgs; [
-      herdr
       discord
       xwayland-satellite
       xdg-user-dirs
@@ -59,6 +58,9 @@ let
       # pins its own nixpkgs (no `follows`), so the package is referenced by
       # literal system; Thor is x86_64-linux per hosts.nix.
       inputs.llm-agents.packages.x86_64-linux.pi
+      inputs.llm-agents.packages.x86_64-linux.herdr
+      inputs.llm-agents.packages.x86_64-linux.hunk
+      inputs.llm-agents.packages.x86_64-linux.handy
     ];
 
   # System-wide on Odin: a launcher and a VPN tray are harmless for Liza, and
