@@ -1,0 +1,69 @@
+/* Catppuccin Mocha stylesheet for regreet (GTK4).
+   Selectors follow regreet 0.5.0's widget tree: the login and clock frames
+   carry the `.background` class; entries, buttons, and labels are styled by
+   node type — regreet sets no CSS IDs. Accent is Mocha mauve. */
+
+window {
+  color: #cdd6f4;
+  background-color: #1e1e2e;
+}
+
+frame.background {
+  color: #cdd6f4;
+  background-color: rgba(30, 30, 46, 0.9);
+  border: 1px solid #cba6f7;
+  border-radius: 12px;
+}
+
+frame.background > grid {
+  padding: 16px;
+}
+
+label {
+  color: #cdd6f4;
+}
+
+entry,
+entry.password,
+combobox button {
+  color: #cdd6f4;
+  caret-color: #cba6f7;
+  background-color: #313244;
+  border: 1px solid #6c7086;
+  border-radius: 8px;
+}
+
+entry:focus,
+entry:focus-within,
+combobox button:focus {
+  border: 1px solid #cba6f7;
+}
+
+button {
+  color: #cdd6f4;
+  background-color: #45475a;
+  border-radius: 8px;
+}
+
+button.suggested-action {
+  color: #1e1e2e;
+  background-color: #cba6f7;
+  border-color: #cba6f7;
+}
+
+button.destructive-action {
+  color: #f38ba8;
+  background-color: #313244;
+  border-color: #f38ba8;
+}
+
+popover contents {
+  color: #cdd6f4;
+  background-color: #313244;
+  border-radius: 8px;
+}
+
+selection {
+  color: #1e1e2e;
+  background-color: #cba6f7;
+}

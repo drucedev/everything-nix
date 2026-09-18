@@ -66,7 +66,26 @@
       };
 
       services.displayManager.defaultSession = "niri";
-      services.displayManager.regreet.enable = true;
+      # Styling matches the desktop: Catppuccin Mocha with mauve accent,
+      # JetBrainsMono Nerd Font (installed system-wide by modules/fonts.nix),
+      # dark mode, and the vendored wallpaper from a store path — the greeter
+      # user cannot traverse the 700-mode home directory. regreet reads these
+      # settings regardless of which compositor hosts it.
+      services.displayManager.regreet = {
+        enable = true;
+        font = {
+          package = pkgs.nerd-fonts.jetbrains-mono;
+          name = "JetBrainsMono Nerd Font";
+        };
+        settings = {
+          background = {
+            path = ./thor/catpuccin-stars.png;
+            fit = "Cover";
+          };
+          GTK.application_prefer_dark_theme = true;
+        };
+        extraCss = ./thor/greeter.css;
+      };
 
       # Minimal niri session hosting regreet for greetd, per regreet's
       # documented niri recipe: spawn regreet, then quit niri (skip
