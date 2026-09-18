@@ -21,6 +21,7 @@ let
       starship
       mise
       nodejs_24
+      gnumake
       gh
       git
       brave
