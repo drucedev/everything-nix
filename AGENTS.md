@@ -65,7 +65,6 @@ modules/checks.nix         host package-platform checks
 - Use Conventional Commits: `type: subject`, imperative, lowercase, no trailing
   period, at most 72 characters. Stage files explicitly by path. Do not commit
   unless the user asks.
-- Keep session handoffs in `.pi/handoffs/` (untracked).
 
 ## Verification
 
@@ -94,3 +93,16 @@ formatter. Do not activate a configuration to verify it.
 4. Add shared users under `modules/users/`; put host-only users in the host
    module. Add an agenix identity and a TODO key in `secrets.nix` when needed.
 5. Run `nix flake check --no-build`; the supported-packages guard is automatic.
+
+## Agent skills
+
+### Issue tracker
+
+Issues and specs are tracked as local markdown files under `.scratch/<feature>/`;
+the directory is gitignored and never committed. See
+`docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The label vocabulary for tracker states and for which Agent takes an item next.
+See `docs/agents/triage-labels.md`.
