@@ -53,11 +53,10 @@
 
       powerManagement.cpuFreqGovernor = "performance";
 
+      # Niri enables gnome-keyring's SSH agent; do not enable programs.ssh.startAgent too.
       programs.niri.enable = true;
       programs.waybar.enable = true;
       programs.xwayland.enable = true;
-      # Niri enables gnome-keyring's SSH agent; do not enable programs.ssh.startAgent too.
-      programs.gamescope.enable = true;
       programs.steam.enable = true;
 
       # Per-project devshells enter via `use flake` .envrc files.
@@ -69,11 +68,32 @@
       services.displayManager.defaultSession = "niri";
       services.displayManager.regreet.enable = true;
 
+      # Minimal niri session hosting regreet for greetd, per regreet's
+      # documented niri recipe: spawn regreet, then quit niri (skip
+      # confirmation) when it exits after the login handoff. regreet
+      # fullscreens on the first monitor it sees, so the DP-5 window rule is
+      # the only mechanism pinning the login box to that output. Every
+      # program is spawned by absolute store path — including the shell,
+      # because niri's spawn-sh-at-startup would resolve `sh` through the
+      # greeter user's PATH. No desktop autostarts here.
+      environment.etc."greetd/niri-greeter.kdl".text = ''
+        spawn-at-startup "${lib.getExe pkgs.bash}" "-c" "${lib.getExe pkgs.regreet}; ${lib.getExe pkgs.niri} msg action quit --skip-confirmation"
+
+        hotkey-overlay {
+            skip-at-startup
+        }
+
+        window-rule {
+            match app-id=r#"^apps\.regreet$"#
+            open-on-output "DP-5"
+        }
+      '';
+
       services.greetd = {
         enable = true;
         settings.default_session = {
           user = "greeter";
-          command = "${pkgs.dbus}/bin/dbus-run-session ${lib.getExe pkgs.gamescope} --backend drm --prefer-output DP-5 --force-windows-fullscreen -- ${lib.getExe pkgs.regreet}";
+          command = "${pkgs.dbus}/bin/dbus-run-session ${lib.getExe pkgs.niri} --config /etc/greetd/niri-greeter.kdl";
         };
       };
 
