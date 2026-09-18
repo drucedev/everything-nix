@@ -22,6 +22,7 @@ let
       mise
       nodejs_24
       gnumake
+      jq
       gh
       git
       brave
