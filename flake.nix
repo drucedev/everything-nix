@@ -26,7 +26,6 @@
     # agenix — age-encrypted secrets.
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
-    agenix.inputs.darwin.follows = "darwin";
 
     # llm-agents — pi coding agent (Thor only). No `follows`: the flake is only
     # tested against its pinned nixpkgs-unstable, and keeping it independent
