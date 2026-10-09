@@ -118,6 +118,15 @@
             match app-id=r#"^apps\.regreet$"#
             open-on-output "DP-5"
         }
+
+        // niri ≥ 25.05 centers the startup pointer on the output it focuses
+        // (focus-at-startup, else the first name-sorted output — HDMI-A-5
+        // here). Also lands startup monitor focus on DP-5. Bare block: no
+        // position, mode, or scale, so niri's automatic output placement and
+        // scale are untouched.
+        output "DP-5" {
+            focus-at-startup
+        }
       '';
 
       services.greetd = {
