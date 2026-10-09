@@ -87,6 +87,17 @@
         extraCss = ./thor/greeter.css;
       };
 
+      # Paint the vendored wallpaper on every output in the greeter session.
+      # awww without --outputs targets all outputs, covering the monitor
+      # regreet's window does not; the daemon is spawned on demand inside
+      # this session and dies with it, never touching the desktop user's
+      # awww instance. Its socket name is derived from this session's
+      # WAYLAND_DISPLAY, so it never contacts the desktop user's daemon.
+      # The PNG is shipped world-readable under /etc (the source store path
+      # is not guaranteed to persist alongside the generation); it is the
+      # same image regreet's background.path shows on DP-5.
+      environment.etc."greetd/awww-greeter.png".source = ./thor/catpuccin-stars.png;
+
       # Minimal niri session hosting regreet for greetd, per regreet's
       # documented niri recipe: spawn regreet, then quit niri (skip
       # confirmation) when it exits after the login handoff. regreet
@@ -96,6 +107,7 @@
       # because niri's spawn-sh-at-startup would resolve `sh` through the
       # greeter user's PATH. No desktop autostarts here.
       environment.etc."greetd/niri-greeter.kdl".text = ''
+        spawn-at-startup "${lib.getExe pkgs.awww}" "img" "/etc/greetd/awww-greeter.png"
         spawn-at-startup "${lib.getExe pkgs.bash}" "-c" "${lib.getExe pkgs.regreet}; ${lib.getExe pkgs.niri} msg action quit --skip-confirmation"
 
         hotkey-overlay {
