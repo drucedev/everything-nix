@@ -58,6 +58,7 @@ let
       # pins its own nixpkgs (no `follows`), so the package is referenced by
       # literal system; Thor is x86_64-linux per hosts.nix.
       inputs.llm-agents.packages.x86_64-linux.pi
+      inputs.llm-agents.packages.x86_64-linux.amp
       inputs.llm-agents.packages.x86_64-linux.herdr
       inputs.llm-agents.packages.x86_64-linux.hunk
       inputs.llm-agents.packages.x86_64-linux.handy
