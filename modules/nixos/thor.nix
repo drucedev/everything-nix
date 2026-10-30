@@ -31,6 +31,10 @@
 
       networking.networkmanager.enable = true;
 
+      # Keep T3's port fixed so its Wi-Fi firewall exception stays valid.
+      environment.sessionVariables.T3CODE_PORT = "3773";
+      networking.firewall.interfaces."wlo1".allowedTCPPorts = [ 3773 ];
+
       time.timeZone = "Europe/Berlin";
 
       i18n.defaultLocale = "en_US.UTF-8";

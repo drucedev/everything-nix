@@ -71,6 +71,18 @@ sudo nixos-rebuild switch --flake .#Ivaldi    # on Ivaldi
 darwin-rebuild switch --flake .#Odin          # on Odin
 ```
 
+### T3 Code mobile on Thor
+
+Thor pins T3 Code to TCP port `3773` using `T3CODE_PORT` and allows incoming
+connections on its Wi-Fi interface (`wlo1`). After rebuilding, fully quit T3
+Code, log out and back in to pick up the session variable, then relaunch it.
+Use T3's pairing flow from the phone on the same network.
+
+The firewall exception applies on every Wi-Fi network Thor joins, not just to
+your phone; keep T3's authentication enabled. No router port forwarding is
+needed. If another process occupies port `3773`, T3 will fail to bind rather
+than select a different port.
+
 ## Update
 
 ```sh
