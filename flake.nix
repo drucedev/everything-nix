@@ -27,7 +27,7 @@
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # llm-agents — pi coding agent (Thor only). No `follows`: the flake is only
+    # llm-agents — coding tools for Thor. No `follows`: the flake is only
     # tested against its pinned nixpkgs-unstable, and keeping it independent
     # preserves prebuilt binaries from numtide's binary cache.
     llm-agents.url = "github:numtide/llm-agents.nix";

@@ -54,14 +54,12 @@ let
       wl-clipboard
       awww
       vintagestory
-      # pi coding agent from numtide/llm-agents while trying it out. The input
-      # pins its own nixpkgs (no `follows`), so the package is referenced by
-      # literal system; Thor is x86_64-linux per hosts.nix.
+      # The input pins its own nixpkgs (no `follows`), so packages are
+      # referenced by literal system; Thor is x86_64-linux per hosts.nix.
       inputs.llm-agents.packages.x86_64-linux.pi
-      inputs.llm-agents.packages.x86_64-linux.amp
       inputs.llm-agents.packages.x86_64-linux.herdr
       inputs.llm-agents.packages.x86_64-linux.hunk
-      inputs.llm-agents.packages.x86_64-linux.handy
+      inputs.llm-agents.packages.x86_64-linux.t3code-desktop
     ];
 
   # System-wide on Odin: a launcher and a VPN tray are harmless for Liza, and
@@ -80,7 +78,7 @@ in
     {
       environment.systemPackages = sharedPackages pkgs ++ druceApps pkgs ++ thorExtraPackages pkgs;
 
-      # Prebuilt llm-agents packages come from numtide's cache. Set system-wide
+      # llm-agents packages come from numtide's cache. Set system-wide
       # because a flake's nixConfig is only honored when interactively accepted
       # per command.
       nix.settings.extra-substituters = [ "https://cache.numtide.com" ];
