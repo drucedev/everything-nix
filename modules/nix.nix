@@ -1,5 +1,5 @@
-# Cross-class nix config. Uses only options existing on BOTH NixOS and
-# nix-darwin (nix-darwin lacks nix.gc.dates etc.), so one module serves both.
+# Shared Nix defaults use only options available on both NixOS and nix-darwin.
+# Binary-cache trust is NixOS-only.
 { ... }:
 
 let
@@ -16,6 +16,14 @@ let
     };
 in
 {
-  config.nixos.base = common;
+  config.nixos.base = {
+    imports = [ common ];
+
+    # Numtide's cache provides llm-agents packages for the Linux hosts.
+    nix.settings.extra-substituters = [ "https://cache.numtide.com" ];
+    nix.settings.extra-trusted-public-keys = [
+      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+    ];
+  };
   config.darwin.base = common;
 }

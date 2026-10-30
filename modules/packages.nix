@@ -42,7 +42,12 @@ let
   # Desktop plumbing that only makes sense on Thor. herdr stays out of
   # sharedPackages: it does not exist on Odin's 26.05-darwin channel.
   thorExtraPackages =
-    pkgs: with pkgs; [
+    pkgs:
+    let
+      ai = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
+    in
+    with pkgs;
+    [
       discord
       xwayland-satellite
       xdg-user-dirs
@@ -54,12 +59,10 @@ let
       wl-clipboard
       awww
       vintagestory
-      # The input pins its own nixpkgs (no `follows`), so packages are
-      # referenced by literal system; Thor is x86_64-linux per hosts.nix.
-      inputs.llm-agents.packages.x86_64-linux.pi
-      inputs.llm-agents.packages.x86_64-linux.herdr
-      inputs.llm-agents.packages.x86_64-linux.hunk
-      inputs.llm-agents.packages.x86_64-linux.t3code-desktop
+      ai.pi
+      ai.herdr
+      ai.hunk
+      ai.t3code-desktop
     ];
 
   # System-wide on Odin: a launcher and a VPN tray are harmless for Liza, and
@@ -77,14 +80,6 @@ in
     { pkgs, ... }:
     {
       environment.systemPackages = sharedPackages pkgs ++ druceApps pkgs ++ thorExtraPackages pkgs;
-
-      # llm-agents packages come from numtide's cache. Set system-wide
-      # because a flake's nixConfig is only honored when interactively accepted
-      # per command.
-      nix.settings.extra-substituters = [ "https://cache.numtide.com" ];
-      nix.settings.extra-trusted-public-keys = [
-        "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
-      ];
     };
 
   config.darwin.odin =
