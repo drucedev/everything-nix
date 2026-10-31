@@ -83,6 +83,14 @@ your phone; keep T3's authentication enabled. No router port forwarding is
 needed. If another process occupies port `3773`, T3 will fail to bind rather
 than select a different port.
 
+### Quickshell on Thor
+
+Thor includes the Quickshell runtime with Qt Quick, Wayland, and SVG support.
+Apply it using the Thor rebuild command above. Shell code belongs in the
+separate dotfiles repo, under `linux/.config/quickshell/druce/`; once stowed
+and containing `shell.qml`, run it manually with `qs -c druce`.
+No Quickshell autostart is configured; Waybar remains enabled.
+
 ## Update
 
 ```sh

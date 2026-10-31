@@ -53,6 +53,7 @@ let
       xdg-user-dirs
       nautilus
       fuzzel
+      quickshell
       grim
       slurp
       swaylock
