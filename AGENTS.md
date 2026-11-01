@@ -1,8 +1,8 @@
 # AGENTS.md
 
 Guidance for agents working on this repo. Keep user-facing install and rebuild
-instructions in `README.md`; this file describes the repository and safe
-verification.
+instructions in `docs/<host>.md`. `README.md` states only what this repository
+is. This file describes the repository and safe verification.
 
 ## Safety
 

@@ -1,10 +1,11 @@
-# Single registry for user-facing packages. Ivaldi stays deliberately headless
-# and gets nothing from here. Dotfiles are managed by the separate stow repo.
+# Single registry for user-facing packages. Dotfiles are managed by the
+# separate stow repo. Ivaldi gets the CLI baseline plus agent tools; GUI apps
+# stay on the workstations.
 { inputs, ... }:
 
 let
-  # Everyone on both workstations, delivered system-wide.
-  sharedPackages =
+  # CLI tools shared by the workstations and Ivaldi.
+  sharedCli =
     pkgs: with pkgs; [
       lsd
       fd
@@ -25,10 +26,31 @@ let
       jq
       gh
       git
-      brave
       btop
       neovim
     ];
+
+  # Everyone on both workstations, delivered system-wide.
+  sharedPackages = pkgs: sharedCli pkgs ++ [ pkgs.brave ];
+
+  # Headless agent host. `t3` is the server CLI, not the Electron app.
+  # The wrapper only puts provider CLIs on `t3`'s own PATH; login shells and
+  # the user service `t3 service install` writes need them on the system PATH.
+  ivaldiAgentPackages =
+    pkgs:
+    let
+      ai = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
+      t3 = ai.t3code;
+    in
+    [
+      ai.pi
+      ai.open-code-review
+      t3
+      pkgs.age
+      pkgs.tmux
+      pkgs.unzip
+    ]
+    ++ t3.providerPackages;
 
   # Druce's GUI apps on both workstations: system-wide on Thor, per-user on
   # Odin so Liza keeps only the shared baseline. Ghostty is prebuilt on
@@ -82,6 +104,12 @@ in
     { pkgs, ... }:
     {
       environment.systemPackages = sharedPackages pkgs ++ druceApps pkgs ++ thorExtraPackages pkgs;
+    };
+
+  config.nixos.ivaldi =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = sharedCli pkgs ++ ivaldiAgentPackages pkgs;
     };
 
   config.darwin.odin =

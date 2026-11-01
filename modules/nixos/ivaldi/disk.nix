@@ -3,8 +3,9 @@
 # TODO before first install: set `device` to the actual whole-disk by-id path
 # (find it: lsblk -o NAME,LINKS). NEVER point it at a partition.
 #
-# Fresh installs only — this reformats the disk:
-#   sudo nix run github:nix-community/disko#disko-install -- --flake .#Ivaldi --disk main /dev/sda
+# Fresh installs only — this destroys, formats, and mounts the disk:
+#   sudo nix run github:nix-community/disko#disko -- \
+#     --mode destroy,format,mount --flake .#Ivaldi
 { ... }:
 
 {

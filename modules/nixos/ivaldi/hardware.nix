@@ -7,6 +7,11 @@
   config.nixos.ivaldi =
     { lib, ... }:
     {
+      # Unknown board until install. The unused microcode image is ignored.
+      hardware.enableRedistributableFirmware = true;
+      hardware.cpu.intel.updateMicrocode = true;
+      hardware.cpu.amd.updateMicrocode = true;
+
       boot.initrd.availableKernelModules = [
         "xhci_pci"
         "ahci"
