@@ -59,7 +59,6 @@
 
       # Niri enables gnome-keyring's SSH agent; do not enable programs.ssh.startAgent too.
       programs.niri.enable = true;
-      programs.waybar.enable = true;
       programs.xwayland.enable = true;
       programs.steam.enable = true;
 
