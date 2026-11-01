@@ -63,6 +63,7 @@ let
       ai.pi
       ai.herdr
       ai.hunk
+      ai.open-code-review
       ai.t3code-desktop
     ];
 
