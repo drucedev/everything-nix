@@ -1,70 +1,52 @@
 # AGENTS.md
 
-Guidance for agents working on this repo. Keep user-facing install and rebuild
-instructions in `docs/<host>.md`. `README.md` states only what this repository
-is. This file describes the repository and safe verification.
+Dendritic Nix flake for Thor (NixOS desktop), Ivaldi (NixOS server), and Odin
+(x86_64-darwin). Human install and rebuild steps live in `docs/<host>.md`;
+`README.md` states only what the repository is.
 
 ## Safety
 
-- Never run `nixos-rebuild`, `darwin-rebuild`, `disko`, `switch`, `boot`,
-  `test`, `reboot`, or commands that restart or activate system services.
-- Do not use `sudo` for system changes. Ask the user to run activation commands
-  manually.
-- For Nix verification, use only non-activating evaluations such as
-  `nix eval` and `nix flake check --no-build`. These must not change the
-  running system.
+Verify with non-activating evaluation only: `nix eval` and
+`nix flake check --no-build`. Never run `nixos-rebuild`, `darwin-rebuild`,
+`disko`, `reboot`, or anything that activates a configuration or restarts
+services, and never use `sudo` for system changes; hand those commands to the
+user.
 
 ## Architecture
 
-This is a [dendritic](https://github.com/mightyiam/dendritic) flake: every file
-under `modules/` is a top-level flake-parts module, auto-imported by
-[import-tree](https://github.com/denful/import-tree). Modules contribute to
-shared options; they do not import one another.
+Every file under `modules/` is a flake-parts module auto-imported by
+[import-tree](https://github.com/denful/import-tree)
+([dendritic](https://github.com/mightyiam/dendritic)). Modules contribute to
+shared options and never import one another.
 
-- `modules/hosts.nix` is the only file that calls `nixosSystem` or
-  `darwinSystem`. Never pass `specialArgs`.
-- `options.<class>.base` and `options.<class>.<host>` are `deferredModule`s.
-  `hosts.nix` composes the base, host, and user modules for each evaluation.
-- Host modules are functions so `nixosSystem` or `darwinSystem` injects `pkgs`.
-  Flake-parts does not provide `pkgs` at top-level module scope.
-- Shared users live in `modules/users/<name>.nix`; host-only users live in the
-  host module. Dotfiles are managed with GNU stow in a separate repository;
-  do not reintroduce home-manager.
-- The disko and agenix NixOS modules are contributed through
-  `config.nixos.modules` (by `modules/nixos/disko.nix` and
-  `modules/nixos/agenix.nix`) into every NixOS eval — Thor and Ivaldi alike;
-  Odin's agenix module is listed directly in `hosts.nix`.
+- `modules/hosts.nix` alone calls `nixosSystem`/`darwinSystem`, composing the
+  `deferredModule`s `<class>.base`, `<class>.<host>`, and the user modules.
+  Never pass `specialArgs`.
+- Host modules are functions so the system constructor injects `pkgs`;
+  flake-parts provides no `pkgs` at module top level.
+- disko and agenix join every NixOS eval through `config.nixos.modules`; Odin
+  lists agenix directly in `hosts.nix`.
+- Shared users live in `modules/users/<name>.nix`, host-only users in the host
+  module. Dotfiles live in a separate GNU stow repository; keep home-manager
+  out.
 
-## Inputs and host roles
+## Inputs
 
-- `nixpkgs`: `nixpkgs-26.05-darwin`, used by Odin and per-system tools.
-- `nixpkgs-stable`: `nixos-26.05`, used by Ivaldi.
-- `nixpkgs-unstable`: `nixos-unstable`, used by Thor.
+- `nixpkgs` (`nixpkgs-26.05-darwin`): Odin and per-system tools; `darwin`
+  follows it.
+- `nixpkgs-stable` (`nixos-26.05`): Ivaldi.
+- `nixpkgs-unstable` (`nixos-unstable`): Thor.
 
-x86_64-darwin support ends at 26.05. Never move `nixpkgs` or `darwin` beyond
-that branch; the stable and unstable Linux inputs may advance.
-
-Thor is the NixOS desktop, Ivaldi is the minimal NixOS server, and Odin is the
-x86_64-darwin host. Important modules are:
-
-```text
-flake.nix                 inputs and mkFlake
-modules/hosts.nix         host composition and system constructors
-modules/nixos/thor.nix    Thor desktop configuration
-modules/nixos/thor/       Thor hardware, disk, and agenix modules
-modules/nixos/ivaldi.nix  Ivaldi server configuration
-modules/darwin/odin.nix   Odin configuration
-modules/users/             shared user modules
-modules/checks.nix         host package-platform checks
-```
+Keep `nixpkgs` and `darwin` on 26.05, the last release supporting
+x86_64-darwin; the Linux inputs may advance.
 
 ## Conventions
 
-- Set `system.stateVersion` at installation time and never change it later.
+- `system.stateVersion` is set at install and never changed.
 - Comments explain only non-obvious constraints or rationale.
-- Use Conventional Commits: `type: subject`, imperative, lowercase, no trailing
-  period, at most 72 characters. Stage files explicitly by path. Do not commit
-  unless the user asks.
+- Commit only when asked, staging files by path, as Conventional Commits:
+  `type: subject`, imperative, lowercase, no trailing period, at most 72
+  characters.
 
 ## Verification
 
@@ -73,36 +55,30 @@ nix fmt
 nix flake check --no-build
 ```
 
-CI evaluates Linux and x86_64-darwin outputs in separate jobs. The automatic
+New files are invisible to the flake until tracked or added with `git add -N`.
+CI evaluates Linux and x86_64-darwin separately; the automatic
 `<host>-supported-packages` checks reject packages whose platforms do not match
-the host OS. New files are invisible to the flake until tracked or added with
-`git add -N`.
-
-For refactors, compare evaluated behavior before and after: system package
-names, important option values, and the `drvPath`s of devShells, checks, and the
-formatter. Do not activate a configuration to verify it.
+the host OS. For refactors, compare evaluated behaviour before and after:
+system package names, important option values, and the `drvPath`s of
+devShells, checks, and the formatter.
 
 ## Adding a host
 
-1. Add `modules/<class>/<name>.nix` with a `deferredModule` option and a host
-   identity function. Do not compose the base there.
-2. For NixOS, add `hardware.nix` and `disk.nix` under the host directory; use a
-   TODO device placeholder in `disk.nix`.
-3. Wire the host in `modules/hosts.nix`, copying the matching NixOS or Darwin
-   composition block.
-4. Add shared users under `modules/users/`; put host-only users in the host
-   module. Add an agenix identity and a TODO key in `secrets.nix` when needed.
-5. Run `nix flake check --no-build`; the supported-packages guard is automatic.
+Add `modules/<class>/<name>.nix` with its `deferredModule` option and host
+identity; the base is composed only in `hosts.nix`. For NixOS, add
+`hardware.nix` and `disk.nix` (TODO device placeholder) under
+`modules/nixos/<name>/`. Wire it in `hosts.nix` by copying the matching
+composition block, and add an agenix identity and TODO key to `secrets.nix`
+when needed.
 
 ## Agent skills
 
 ### Issue tracker
 
-Issues and specs are tracked as local markdown files under `.scratch/<feature>/`;
-the directory is gitignored and never committed. See
+Local markdown under `.scratch/<feature>/`, gitignored. See
 `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 
-The label vocabulary for tracker states and for which Agent takes an item next.
-See `docs/agents/triage-labels.md`.
+The label vocabulary for tracker states and item types. See
+`docs/agents/triage-labels.md`.

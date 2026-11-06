@@ -1,31 +1,33 @@
 # Issue tracker: Local Markdown
 
-Issues and specs for this repo live as markdown files in `.scratch/`. The directory is gitignored: it is durable inter-session memory on this machine, but it is never committed, versioned, or pushed.
+Issues and specs live as markdown files in `.scratch/`, which is gitignored:
+durable memory on this machine, never committed.
 
-## Conventions
+- One feature per directory: `.scratch/<feature-slug>/`.
+- The spec is `.scratch/<feature-slug>/spec.md`.
+- Each ticket is its own file, `.scratch/<feature-slug>/issues/<NN>-<slug>.md`,
+  numbered from `01`.
+- Near the top of each file, a `Status:` line holds the triage state and a
+  `Type:` line marks a spec or research ticket (roles in `triage-labels.md`).
+- Comments append under a `## Comments` heading at the bottom.
 
-- One feature per directory: `.scratch/<feature-slug>/`
-- The spec is `.scratch/<feature-slug>/spec.md`
-- Implementation issues are one file per ticket at `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01`: never a single combined tickets file
-- Triage state is recorded as a `Status:` line near the top of each issue file, and the handler Agent as an `Agent:` line beside it (see `triage-labels.md` for the role strings)
-- Comments and conversation history append to the bottom of the file under a `## Comments` heading
+**Publish** creates the file, and its directory if needed. **Fetch** reads the
+file at the path or issue number the user gives.
 
-## When a skill says "publish to the issue tracker"
+## Blocking
 
-Create a new file under `.scratch/<feature-slug>/` (creating the directory if needed).
+List blockers in the blocked ticket's `## Blocked by` section as
+repository-relative paths, or `None - can start immediately`. Publish blockers
+first. A ticket is complete at `Status: closed`, a research ticket at
+`Status: resolved`; a ticket can start only when every listed blocker exists
+and is complete.
 
-## When a skill says "fetch the relevant ticket"
+## Standalone research ticket
 
-Read the file at the referenced path. The user will normally pass the path or the issue number directly.
+One fact that needs its own session: an issue file with `Type: research` whose
+body states the question and the decision it gates.
 
-## Wayfinding operations
-
-Used by `wayfinder`. The **map** is a file with one **child** file per ticket.
-
-- **Map**: `.scratch/<effort>/map.md`, containing the Notes / Decisions-so-far / Fog body.
-- **Child ticket**: `.scratch/<effort>/issues/NN-<slug>.md`, numbered from `01`, with the question in the body. An `Agent:` line records the handler (`researcher`/`product-owner`), which is also the ticket's type; a `Status:` line records `claimed`/`resolved`.
-- **Blocking**: a `Blocked by: NN, NN` line near the top. A ticket is unblocked when every file it lists is `resolved`.
-- **Frontier**: scan `.scratch/<effort>/issues/` for files that are open, unblocked, and unclaimed; first by number wins.
-- **Claim**: set `Status: claimed` and save before any work.
-- **Resolve**: append the answer under a `## Resolution` heading, set `Status: resolved`, then append a context pointer (gist + link) to the map's Decisions-so-far in `map.md`.
-- **Standalone research ticket**: the same child-ticket file shape in an effort directory that has no `map.md`, so nothing is appended on resolution.
+- **Claim**: if `Status:` reads `claimed`, stop and say so; otherwise set
+  `Status: claimed` and save before reading deeply.
+- **Resolve**: append the answer, evidence, and consequences under
+  `## Resolution`, set `Status: resolved`, and report the decision it unblocks.
