@@ -83,6 +83,7 @@ let
       awww
       vintagestory
       ai.pi
+      ai.claude-code
       ai.herdr
       ai.hunk
       ai.open-code-review
