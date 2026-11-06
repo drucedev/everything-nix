@@ -4,6 +4,7 @@
 let
   sharedCli =
     pkgs: with pkgs; [
+      bat
       lsd
       fd
       ripgrep
