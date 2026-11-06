@@ -27,8 +27,6 @@ let
       neovim
     ];
 
-  sharedPackages = pkgs: sharedCli pkgs ++ [ pkgs.brave ];
-
   # Linux only: llm-agents has no x86_64-darwin builds.
   agentTools =
     pkgs:
@@ -72,6 +70,7 @@ let
     in
     with pkgs;
     [
+      brave
       discord
       xwayland-satellite
       xdg-user-dirs
@@ -101,7 +100,7 @@ in
   config.nixos.thor =
     { pkgs, ... }:
     {
-      environment.systemPackages = sharedPackages pkgs ++ druceApps pkgs ++ thorExtraPackages pkgs;
+      environment.systemPackages = sharedCli pkgs ++ druceApps pkgs ++ thorExtraPackages pkgs;
     };
 
   config.nixos.ivaldi =
@@ -113,7 +112,7 @@ in
   config.darwin.odin =
     { pkgs, ... }:
     {
-      environment.systemPackages = sharedPackages pkgs ++ odinSystemApps pkgs;
+      environment.systemPackages = sharedCli pkgs ++ odinSystemApps pkgs;
 
       # Per-user apps leave /Applications/Nix Apps; dock pins use store paths.
       users.users.druce.packages = druceApps pkgs ++ [ pkgs.obsidian ];

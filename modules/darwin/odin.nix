@@ -40,7 +40,6 @@
       system.defaults = {
         dock.show-recents = false;
         dock.persistent-apps = [
-          "${pkgs.brave}/Applications/Brave Browser.app"
           "${pkgs.ghostty-bin}/Applications/Ghostty.app"
           "${pkgs.zed-editor}/Applications/Zed.app"
           "${pkgs.obsidian}/Applications/Obsidian.app"
