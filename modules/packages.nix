@@ -18,6 +18,7 @@ let
       stow
       starship
       mise
+      python3
       nodejs_24
       gnumake
       jq
