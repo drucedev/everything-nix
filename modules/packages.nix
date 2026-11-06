@@ -10,6 +10,7 @@ let
       ripgrep
       fzf
       curl
+      ffmpeg
       tree-sitter
       (if stdenv.hostPlatform.isDarwin then clang else gcc)
       zoxide
