@@ -70,12 +70,10 @@ let
     pkgs:
     let
       ai = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
-      # TODO: return to pkgs.brave once its re-addition reaches nixos-unstable.
-      stable = inputs.nixpkgs-stable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
     in
     with pkgs;
     [
-      stable.brave
+      brave
       discord
       xwayland-satellite
       xdg-user-dirs
