@@ -80,8 +80,6 @@ let
       nautilus
       fuzzel
       quickshell
-      grim
-      slurp
       swaylock
       wl-clipboard
       awww
