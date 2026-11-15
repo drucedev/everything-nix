@@ -26,9 +26,7 @@
         efiInstallAsRemovable = true;
         maxGenerations = 10;
       };
-      # Mainline instead of Zen: 7.3.4-zen1 panics at boot (zen-kernel#425).
-      # Zen is usable again once nixos-unstable carries 7.3.4-zen2 or newer.
-      boot.kernelPackages = pkgs.linuxPackages_latest;
+      boot.kernelPackages = pkgs.linuxPackages_zen;
 
       networking.networkmanager.enable = true;
 
