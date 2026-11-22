@@ -112,7 +112,6 @@ let
       awww
       vintagestory
       ai.grok-bot
-      ai.voxtype
       (ai.t3code-desktop.override { t3code = t3code pkgs; })
     ]
     ++ agentTools pkgs;
