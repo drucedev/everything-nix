@@ -1,5 +1,3 @@
-# inspo: https://github.com/eh8/chenglab/blob/main/.github/workflows/flake.yml
-
 name: Bump flake.lock
 on:
   schedule:

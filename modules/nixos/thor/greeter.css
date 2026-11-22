@@ -1,8 +1,3 @@
-/* Catppuccin Mocha stylesheet for regreet (GTK4).
-   Selectors follow regreet 0.5.0's widget tree: the login and clock frames
-   carry the `.background` class; entries, buttons, and labels are styled by
-   node type — regreet sets no CSS IDs. Accent is Mocha mauve. */
-
 window {
   color: #cdd6f4;
   background-color: #1e1e2e;

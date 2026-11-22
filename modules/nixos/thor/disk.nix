@@ -1,10 +1,3 @@
-# Declarative disk layout for Thor (disko); replaces fileSystems/swapDevices.
-#
-# Thor's whole-disk by-id path; NEVER point it at a partition.
-#
-# Fresh installs only — this destroys, formats, and mounts the disk:
-#   sudo nix run github:nix-community/disko#disko -- \
-#     --mode destroy,format,mount --flake .#Thor
 { ... }:
 
 {

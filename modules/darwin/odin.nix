@@ -1,6 +1,3 @@
-# Odin — nix-darwin host (x86_64-darwin, stable nixpkgs): identity + unique
-# settings. hosts.nix composes darwin.base alongside; druce comes from
-# users/druce.nix. The config is a function so darwinSystem injects `pkgs`.
 {
   lib,
   ...
@@ -20,17 +17,13 @@
       system.primaryUser = "druce";
       system.stateVersion = 6;
 
-      # Odin's age key; generate: sudo age-keygen -o /etc/age/age-key (pubkey -> secrets.nix).
-      # Must be root-readable (darwin activation runs as root).
       age.identityPaths = [ "/etc/age/age-key" ];
 
-      # Per-project devshells enter via `use flake` .envrc files.
       programs.direnv = {
         enable = true;
         nix-direnv.enable = true;
       };
 
-      # Liza — login user on Odin only.
       users.users.liza = {
         name = "liza";
         home = "/Users/liza";

@@ -1,4 +1,3 @@
-# The reusable NixOS base; shared NixOS configuration merges into it.
 { lib, ... }:
 
 {
@@ -7,7 +6,6 @@
     default = { };
   };
 
-  # Needed so users.users.druce.shell = pkgs.zsh resolves.
   config.nixos.base = {
     programs.zsh.enable = true;
   };

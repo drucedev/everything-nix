@@ -1,4 +1,3 @@
-# Non-disk hardware for Thor (disko owns the mounts).
 { ... }:
 
 {
@@ -16,7 +15,6 @@
         "sd_mod"
       ];
       boot.initrd.kernelModules = [ ];
-      # Load NVIDIA DRM before the direct-DRM Gamescope greeter starts.
       boot.kernelModules = [
         "kvm-intel"
         "nvidia"

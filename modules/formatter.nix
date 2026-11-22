@@ -1,4 +1,3 @@
-# `nix fmt` for the whole tree (plain nixfmt deprecated directory arguments).
 { ... }:
 
 {

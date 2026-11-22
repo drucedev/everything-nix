@@ -1,6 +1,3 @@
-# Thor — NixOS host (x86_64-linux, nixpkgs-unstable): identity + unique desktop
-# stack. Hardware/disk/agenix live in thor/*.nix; hosts.nix composes nixos.base
-# alongside. The config is a function so nixosSystem injects `pkgs`.
 {
   lib,
   ...
@@ -16,7 +13,6 @@
     { pkgs, ... }:
     {
       networking.hostName = "Thor";
-      # Do NOT change after install — pins migration behavior.
       system.stateVersion = "26.05";
 
       boot.loader.efi.canTouchEfiVariables = true;
@@ -30,7 +26,6 @@
 
       networking.networkmanager.enable = true;
 
-      # Keep T3's port fixed so its Wi-Fi firewall exception stays valid.
       environment.sessionVariables.T3CODE_PORT = "3773";
       networking.firewall.interfaces."wlo1".allowedTCPPorts = [ 3773 ];
 
@@ -56,23 +51,16 @@
 
       powerManagement.cpuFreqGovernor = "performance";
 
-      # Niri enables gnome-keyring's SSH agent; do not enable programs.ssh.startAgent too.
       programs.niri.enable = true;
       programs.xwayland.enable = true;
       programs.steam.enable = true;
 
-      # Per-project devshells enter via `use flake` .envrc files.
       programs.direnv = {
         enable = true;
         nix-direnv.enable = true;
       };
 
       services.displayManager.defaultSession = "niri";
-      # Styling matches the desktop: Catppuccin Mocha with mauve accent,
-      # JetBrainsMono Nerd Font (installed system-wide by modules/fonts.nix),
-      # dark mode, and the vendored wallpaper from a store path — the greeter
-      # user cannot traverse the 700-mode home directory. regreet reads these
-      # settings regardless of which compositor hosts it.
       services.displayManager.regreet = {
         enable = true;
         font = {
@@ -89,25 +77,8 @@
         extraCss = ./thor/greeter.css;
       };
 
-      # Paint the vendored wallpaper on every output in the greeter session.
-      # awww without --outputs targets all outputs, covering the monitor
-      # regreet's window does not; the daemon is spawned on demand inside
-      # this session and dies with it, never touching the desktop user's
-      # awww instance. Its socket name is derived from this session's
-      # WAYLAND_DISPLAY, so it never contacts the desktop user's daemon.
-      # The PNG is shipped world-readable under /etc (the source store path
-      # is not guaranteed to persist alongside the generation); it is the
-      # same image regreet's background.path shows on DP-5.
       environment.etc."greetd/awww-greeter.png".source = ./thor/catpuccin-stars.png;
 
-      # Minimal niri session hosting regreet for greetd, per regreet's
-      # documented niri recipe: spawn regreet, then quit niri (skip
-      # confirmation) when it exits after the login handoff. regreet
-      # fullscreens on the first monitor it sees, so the DP-5 window rule is
-      # the only mechanism pinning the login box to that output. Every
-      # program is spawned by absolute store path — including the shell,
-      # because niri's spawn-sh-at-startup would resolve `sh` through the
-      # greeter user's PATH. No desktop autostarts here.
       environment.etc."greetd/niri-greeter.kdl".text = ''
         spawn-at-startup "${lib.getExe pkgs.awww}" "img" "/etc/greetd/awww-greeter.png"
         spawn-at-startup "${lib.getExe pkgs.bash}" "-c" "${lib.getExe pkgs.regreet}; ${lib.getExe pkgs.niri} msg action quit --skip-confirmation"
@@ -121,11 +92,6 @@
             open-on-output "DP-5"
         }
 
-        // niri ≥ 25.05 centers the startup pointer on the output it focuses
-        // (focus-at-startup, else the first name-sorted output — HDMI-A-5
-        // here). Also lands startup monitor focus on DP-5. Bare block: no
-        // position, mode, or scale, so niri's automatic output placement and
-        // scale are untouched.
         output "DP-5" {
             focus-at-startup
         }
@@ -140,7 +106,6 @@
       };
 
       services.udisks2.enable = true;
-      # Nautilus needs GVfs to list and mount removable drives.
       services.gvfs.enable = true;
 
       services.pipewire = {
@@ -159,8 +124,5 @@
         powerManagement.enable = true;
         open = true;
       };
-
-      # Thor's package set is contributed by packages.nix; desktop programs above
-      # add their own runtime packages.
     };
 }

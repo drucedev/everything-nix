@@ -1,18 +1,9 @@
-# Declarative disk layout for Ivaldi (disko); replaces fileSystems/swapDevices.
-#
-# TODO before first install: set `device` to the actual whole-disk by-id path
-# (find it: lsblk -o NAME,LINKS). NEVER point it at a partition.
-#
-# Fresh installs only — this destroys, formats, and mounts the disk:
-#   sudo nix run github:nix-community/disko#disko -- \
-#     --mode destroy,format,mount --flake .#Ivaldi
 { ... }:
 
 {
   config.nixos.ivaldi = {
     disko.devices = {
       disk.main = {
-        # TODO: replace with the real disk by-id path.
         device = "/dev/disk/by-id/TODO-REPLACE-WITH-ACTUAL-DISK-ID";
         type = "disk";
         content = {

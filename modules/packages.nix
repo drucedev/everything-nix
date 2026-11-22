@@ -1,4 +1,3 @@
-# Single registry for user-facing packages; dotfiles live in the stow repo.
 { inputs, ... }:
 
 let
@@ -30,7 +29,6 @@ let
       neovim
     ];
 
-  # Linux only: llm-agents has no x86_64-darwin builds.
   agentTools =
     pkgs:
     let
@@ -42,10 +40,6 @@ let
       ai.open-code-review
     ];
 
-  # transcribe-cpp's prebuilt koffi and ggml libraries cannot resolve
-  # libstdc++ or libvulkan, breaking local speech; patch them as upstream
-  # patches node-pty. Libraries come from llm-agents' nixpkgs so one glibc
-  # is loaded. The desktop output reuses this server tree via a symlink.
   t3code =
     pkgs:
     let
@@ -69,8 +63,6 @@ let
       });
     };
 
-  # `t3` only puts provider CLIs on its own PATH; shells and the
-  # `t3 service install` unit need them system-wide.
   ivaldiAgentPackages =
     pkgs:
     let
@@ -85,8 +77,6 @@ let
     ]
     ++ t3.providerPackages;
 
-  # Per-user on Odin so Liza keeps only the shared baseline. ghostty-bin
-  # avoids a heavy source build on darwin.
   druceApps =
     pkgs: with pkgs; [
       zed-editor
@@ -116,7 +106,6 @@ let
     ]
     ++ agentTools pkgs;
 
-  # System-wide: raycast needs Launch Services visibility.
   odinSystemApps =
     pkgs: with pkgs; [
       raycast
@@ -142,8 +131,6 @@ in
     { pkgs, ... }:
     {
       environment.systemPackages = sharedCli pkgs ++ odinSystemApps pkgs;
-
-      # Per-user apps leave /Applications/Nix Apps; dock pins use store paths.
       users.users.druce.packages = druceApps pkgs ++ [ pkgs.obsidian ];
     };
 }

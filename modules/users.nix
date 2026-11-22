@@ -1,4 +1,3 @@
-# Per-user modules (deferredModule keyed by name); hosts.nix imports them per host.
 { lib, ... }:
 {
   options.users = lib.mkOption {

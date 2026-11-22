@@ -1,4 +1,3 @@
-# Allow unfree packages on both classes.
 { ... }:
 
 {

@@ -43,7 +43,8 @@ x86_64-darwin; the Linux inputs may advance.
 ## Conventions
 
 - `system.stateVersion` is set at install and never changed.
-- Comments explain only non-obvious constraints or rationale.
+- Record non-obvious decisions and constraints as ADRs in `docs/adr/`, not
+  as code comments.
 - Commit only when asked, staging files by path, as Conventional Commits:
   `type: subject`, imperative, lowercase, no trailing period, at most 72
   characters.

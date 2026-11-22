@@ -1,7 +1,3 @@
-# Evaluates the flake on both host platforms (`nix flake check` skips outputs
-# of incompatible systems, so the legs are complementary). --no-build: nothing
-# is built on CI. macos-26-intel is the last x86_64-darwin label; if it queues
-# forever, enable billing/larger runners on the account.
 name: Check flake
 
 on:
@@ -12,7 +8,6 @@ jobs:
   check:
     runs-on: ${{ matrix.os }}
     strategy:
-      # A red leg must not cancel the other — their coverage differs.
       fail-fast: false
       matrix:
         os:
