@@ -140,6 +140,8 @@
       };
 
       services.udisks2.enable = true;
+      # Nautilus needs GVfs to list and mount removable drives.
+      services.gvfs.enable = true;
 
       services.pipewire = {
         enable = true;
