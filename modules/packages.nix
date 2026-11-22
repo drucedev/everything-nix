@@ -84,6 +84,8 @@ let
       wl-clipboard
       awww
       vintagestory
+      ai.grok-bot
+      ai.voxtype
       ai.t3code-desktop
     ]
     ++ agentTools pkgs;
