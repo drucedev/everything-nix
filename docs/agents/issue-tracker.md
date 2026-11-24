@@ -1,33 +1,30 @@
-# Issue tracker: Local Markdown
+# Issue tracker: beads (stealth)
 
-Issues and specs live as markdown files in `.scratch/`, which is gitignored:
-durable memory on this machine, never committed.
+Issues live in a local [beads](https://github.com/gastownhall/beads) database
+(`bd`, installed on Thor), initialised with `bd init --stealth`: `.beads/` is
+excluded through `.git/info/exclude`, so nothing reaches tracked files. Run
+`bd` from the repository root; use `--json` when parsing output.
 
-- One feature per directory: `.scratch/<feature-slug>/`.
-- The spec is `.scratch/<feature-slug>/spec.md`.
-- Each ticket is its own file, `.scratch/<feature-slug>/issues/<NN>-<slug>.md`,
-  numbered from `01`.
-- Near the top of each file, a `Status:` line holds the triage state and a
-  `Type:` line marks a spec or research ticket (roles in `triage-labels.md`).
-- Comments append under a `## Comments` heading at the bottom.
-
-**Publish** creates the file, and its directory if needed. **Fetch** reads the
-file at the path or issue number the user gives.
+- **Spec**: an `epic` whose description holds the spec
+  (`bd create "<title>" -t epic --body-file <file>`).
+- **Ticket**: a child of its spec (`bd create "<title>" --parent <epic-id>
+  --body-file <file>`), or a standalone issue.
+- **Fetch**: `bd show <id>`; list with `bd list` or `bd ready`.
+- **Comment**: `bd comment <id> "<text>"`.
+- **Labels and states**: see `triage-labels.md`.
 
 ## Blocking
 
-List blockers in the blocked ticket's `## Blocked by` section as
-repository-relative paths, or `None - can start immediately`. Publish blockers
-first. A ticket is complete at `Status: closed`, a research ticket at
-`Status: resolved`; a ticket can start only when every listed blocker exists
-and is complete.
+Record blockers as dependencies: `bd dep add <blocked> <blocker>`. Publish
+blockers first. A ticket is complete when closed (`bd close <id> -r "<why>"`);
+it can start only when `bd ready` lists it.
 
 ## Standalone research ticket
 
-One fact that needs its own session: an issue file with `Type: research` whose
-body states the question and the decision it gates.
+One fact that needs its own session: a `spike` whose description states the
+question and the decision it gates.
 
-- **Claim**: if `Status:` reads `claimed`, stop and say so; otherwise set
-  `Status: claimed` and save before reading deeply.
-- **Resolve**: append the answer, evidence, and consequences under
-  `## Resolution`, set `Status: resolved`, and report the decision it unblocks.
+- **Claim**: if it is `in_progress`, stop and say so; otherwise
+  `bd update <id> --claim` before reading deeply.
+- **Resolve**: comment the answer, evidence, and consequences, close it with
+  `-r resolved`, and report the decision it unblocks.

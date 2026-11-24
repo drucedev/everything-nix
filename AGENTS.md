@@ -76,7 +76,7 @@ when needed.
 
 ### Issue tracker
 
-Local markdown under `.scratch/<feature>/`, gitignored. See
+Local beads database in stealth mode (`bd`, Thor only). See
 `docs/agents/issue-tracker.md`.
 
 ### Triage labels

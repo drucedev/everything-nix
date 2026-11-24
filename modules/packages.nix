@@ -102,6 +102,8 @@ let
       awww
       vintagestory
       ai.grok-bot
+      ai.beads
+      ai.beads-viewer
       (ai.t3code-desktop.override { t3code = t3code pkgs; })
     ]
     ++ agentTools pkgs;
