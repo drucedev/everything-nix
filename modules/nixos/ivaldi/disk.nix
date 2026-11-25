@@ -4,7 +4,7 @@
   config.nixos.ivaldi = {
     disko.devices = {
       disk.main = {
-        device = "/dev/disk/by-id/TODO-REPLACE-WITH-ACTUAL-DISK-ID";
+        device = "/dev/disk/by-id/nvme-ADATA_LEGEND_740_2M09292KK4YJ_1";
         type = "disk";
         content = {
           type = "gpt";
