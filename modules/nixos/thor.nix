@@ -52,6 +52,7 @@
       powerManagement.cpuFreqGovernor = "performance";
 
       programs.niri.enable = true;
+      programs.nix-ld.enable = true;
       programs.xwayland.enable = true;
       programs.steam.enable = true;
 
