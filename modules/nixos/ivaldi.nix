@@ -25,6 +25,10 @@
 
       networking.networkmanager.enable = true;
 
+      nix.settings.extra-trusted-public-keys = [
+        "thor-1:Q18iQ9fEziCrIyCqjYrl9Am+PMj1zq96txG8OY4r+ak="
+      ];
+
       time.timeZone = "Europe/Berlin";
       i18n.defaultLocale = "en_US.UTF-8";
 

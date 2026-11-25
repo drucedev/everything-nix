@@ -71,20 +71,28 @@ when it differs, and commit. The root password stays unset; `sudo` covers it.
 
 ## First boot
 
-Remove the USB, then `ssh druce@<ivaldi-ip>` from Thor. Clone a persistent
-checkout:
-
-```sh
-git clone <repo-url> "$HOME/everything-nix"
-```
+Remove the USB, then `ssh druce@<ivaldi-ip>` from Thor.
 
 Stow dotfiles from their separate repository: `stow -t ~ <package>`.
 
 ## Rebuild and update
 
+Rebuild from Thor's checkout. Thor builds and signs the system, then copies it
+over SSH:
+
 ```sh
-sudo nixos-rebuild switch --flake .#Ivaldi
+nixos-rebuild switch --flake .#Ivaldi \
+  --target-host druce@<ivaldi-ip> --ask-sudo-password
 nix flake update   # a GitHub Action also does this daily
+```
+
+If Ivaldi rejects a path as lacking a signature, Thor built it before the
+signing key existed. Sign the closure, then rerun the rebuild:
+
+```sh
+sudo nix store sign --key-file /etc/nix/thor-signing-key --recursive \
+  "$(nix build --no-link --print-out-paths \
+    .#nixosConfigurations.Ivaldi.config.system.build.toplevel)"
 ```
 
 ## T3 Code

@@ -32,6 +32,17 @@ dotfiles from their separate repository (`stow -t ~ <package>`):
 git clone <repo-url> "$HOME/everything-nix"
 ```
 
+## Signing key
+
+Thor signs its builds so Ivaldi accepts them. Before the first rebuild that
+includes `nix.settings.secret-key-files`, create the root-only key and put its
+public half in `modules/nixos/ivaldi.nix`:
+
+```sh
+sudo sh -c 'umask 077; nix key generate-secret --key-name thor-1 > /etc/nix/thor-signing-key'
+sudo sh -c 'nix key convert-secret-to-public < /etc/nix/thor-signing-key'
+```
+
 ## Rebuild and update
 
 ```sh

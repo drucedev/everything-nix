@@ -26,6 +26,8 @@
 
       networking.networkmanager.enable = true;
 
+      nix.settings.secret-key-files = [ "/etc/nix/thor-signing-key" ];
+
       environment.sessionVariables.T3CODE_PORT = "3773";
       networking.firewall.interfaces."wlo1".allowedTCPPorts = [ 3773 ];
 
