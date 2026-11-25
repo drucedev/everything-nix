@@ -21,6 +21,7 @@ Status: Accepted
   them.
 - A drop-in on `t3code.service` only pins `T3CODE_PORT=3773`;
   `~/.t3/service.env` can still override it.
-- TCP 3773 is open for LAN pairing only. T3 Connect is outbound and does not
+- TCP 3773 and SSH are open only on the wired LAN interface, `enp1s0`;
+  rename it there if the hardware changes. 3773 is for LAN pairing only. T3 Connect is outbound and does not
   need it. Do not forward the port: a pairing code is the only LAN
   authentication, and T3 refuses public addresses when started with `--lan`.

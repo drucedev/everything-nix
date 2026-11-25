@@ -45,8 +45,14 @@
           PasswordAuthentication = false;
           KbdInteractiveAuthentication = false;
           PermitRootLogin = "no";
+          AllowUsers = [ "druce" ];
+          MaxAuthTries = 3;
+          LoginGraceTime = 30;
         };
+        openFirewall = false;
       };
+
+      security.sudo.execWheelOnly = true;
 
       programs.direnv = {
         enable = true;
@@ -77,7 +83,10 @@
       ];
       fonts.packages = [ pkgs.dejavu_fonts ];
 
-      networking.firewall.allowedTCPPorts = [ 3773 ];
+      networking.firewall.interfaces.enp1s0.allowedTCPPorts = [
+        22
+        3773
+      ];
 
       systemd.user.extraConfig = ''
         DefaultEnvironment=PATH=/run/wrappers/bin:/run/current-system/sw/bin:/usr/bin:/bin NIX_LD=/run/current-system/sw/share/nix-ld/lib/ld.so NIX_LD_LIBRARY_PATH=/run/current-system/sw/share/nix-ld/lib

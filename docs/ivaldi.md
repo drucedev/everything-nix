@@ -16,7 +16,9 @@ Code Review (`ocr`), and the T3 Code server (`t3`) with its provider CLIs.
 
 2. Reserve Ivaldi's wired MAC address in the UniFi Gateway (Client Devices →
    Settings → Fixed IP Address). The live USB and the installed system share
-   the address.
+   the address. Add a UniFi Local DNS Record (Settings → Policy Table → DNS)
+   mapping `ivaldi.lan` to it. SSH and T3 listen only on the wired interface,
+   `enp1s0`.
 
 3. SSH is key-only, with Thor's key already in `modules/nixos/ivaldi.nix`. Add
    any other public key to `users.users.druce.openssh.authorizedKeys.keys`
@@ -71,18 +73,19 @@ when it differs, and commit. The root password stays unset; `sudo` covers it.
 
 ## First boot
 
-Remove the USB, then `ssh druce@<ivaldi-ip>` from Thor.
+Remove the USB, then `ssh druce@ivaldi.lan` from Thor.
 
 Stow dotfiles from their separate repository: `stow -t ~ <package>`.
 
 ## Rebuild and update
 
 Rebuild from Thor's checkout. Thor builds and signs the system, then copies it
-over SSH:
+over SSH. Thor's shell aliases pull first: `uu-ivaldi`, `uu-thor`, and `uu-all`
+for both.
 
 ```sh
 nixos-rebuild switch --flake .#Ivaldi \
-  --target-host druce@<ivaldi-ip> --ask-sudo-password
+  --target-host druce@ivaldi.lan --ask-sudo-password
 nix flake update   # a GitHub Action also does this daily
 ```
 
@@ -114,14 +117,15 @@ agent login            # Cursor (binary: cursor-agent)
 gh auth login          # so agents can open pull requests
 pi                     # then /login, for Pi as a provider
 
-t3 up --connect        # approve the printed link; installs the service
-# t3 up --lan          # optional LAN/tailnet access; then `t3 pair`
+t3 up --lan            # LAN access; installs the service
+t3 pair                # pair Thor's app or the phone at http://ivaldi.lan:3773
+# t3 up --connect      # optional remote access through T3 Connect
 t3 status
 t3 service status
 ```
 
-Sign in to the same T3 Connect account on the phone or Thor's desktop app and
-choose the Ivaldi environment.
+With T3 Connect, sign in to the same account on the phone or Thor's desktop app
+and choose the Ivaldi environment.
 
 T3's headless Chrome runs through nix-ld instead of `t3 browser setup`. If a
 browser tab names a missing library, add it to `programs.nix-ld.libraries` and

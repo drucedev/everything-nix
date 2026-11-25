@@ -26,6 +26,12 @@
 
       networking.networkmanager.enable = true;
 
+      programs.zsh.shellAliases = {
+        uu-thor = "(cd ~/everything-nix && git pull && sudo nixos-rebuild switch --flake .#Thor)";
+        uu-ivaldi = "(cd ~/everything-nix && git pull && nixos-rebuild switch --flake .#Ivaldi --target-host druce@ivaldi.lan --ask-sudo-password)";
+        uu-all = "uu-thor && uu-ivaldi";
+      };
+
       nix.settings.secret-key-files = [ "/etc/nix/thor-signing-key" ];
 
       environment.sessionVariables.T3CODE_PORT = "3773";
