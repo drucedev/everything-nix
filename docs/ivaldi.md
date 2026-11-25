@@ -6,61 +6,76 @@ Code Review (`ocr`), and the T3 Code server (`t3`) with its provider CLIs.
 
 ## Before the installer
 
-1. Set `device` in `modules/nixos/ivaldi/disk.nix` to the whole target disk,
-   never a partition. From the installer:
+1. On Thor, check what the install would build locally. Expect only small
+   configuration derivations under "will be built"; Thor trusts the Numtide
+   cache, so anything large there would also compile on Ivaldi's N100.
 
    ```sh
-   lsblk -o NAME,PATH,SIZE,TYPE,MODEL,SERIAL,FSTYPE,MOUNTPOINTS
-   ls -l /dev/disk/by-id
+   nix build .#nixosConfigurations.Ivaldi.config.system.build.toplevel --dry-run
    ```
 
-2. SSH is key-only, with Thor's key already in `modules/nixos/ivaldi.nix`. Add
+2. Reserve Ivaldi's wired MAC address in the UniFi Gateway (Client Devices →
+   Settings → Fixed IP Address). The live USB and the installed system share
+   the address.
+
+3. SSH is key-only, with Thor's key already in `modules/nixos/ivaldi.nix`. Add
    any other public key to `users.users.druce.openssh.authorizedKeys.keys`
    there. The console password still works, including for `sudo`.
 
-3. Install from a checkout with those edits: push them first, or edit the live
-   checkout before running disko.
+## Install from Thor
 
-## Install
-
-From the NixOS minimal installer (UEFI boot, flakes enabled), on wired DHCP or
-Wi-Fi via `nmtui`:
+Boot the NixOS minimal installer in UEFI mode, on wired DHCP or Wi-Fi via
+`nmtui`. On Ivaldi's console, set a temporary password for the live `nixos`
+user:
 
 ```sh
-# Keep the checkout outside /mnt; disko mounts the target system there.
-git clone <repo-url> /tmp/everything-nix
-cd /tmp/everything-nix
-readlink -f /dev/disk/by-id/<the-id-in-disk.nix>
+passwd
+```
 
+Everything else runs on Thor. Authorize Thor's key and identify the disk:
+
+```sh
+ssh-copy-id -o HostKeyAlias=ivaldi-installer nixos@<ivaldi-ip>
+ssh -o HostKeyAlias=ivaldi-installer nixos@<ivaldi-ip> \
+  'lsblk -o NAME,PATH,SIZE,TYPE,MODEL,SERIAL,FSTYPE; ls -l /dev/disk/by-id'
+```
+
+If the disk changed, set `device` in `modules/nixos/ivaldi/disk.nix` to the
+whole-disk `/dev/disk/by-id` entry, never a `-partN` one, then confirm:
+
+```sh
+nix eval --raw .#nixosConfigurations.Ivaldi.config.disko.devices.disk.main.device
+```
+
+Install with [nixos-anywhere](https://github.com/nix-community/nixos-anywhere).
+It builds on Thor and copies the closure, so nothing compiles on Ivaldi. Skip
+the reboot phase to set `druce`'s password first:
+
+```sh
 # WARNING: erases the disk configured in modules/nixos/ivaldi/disk.nix
 # (512M ESP, 4G swap, ext4 root).
-sudo nix run github:nix-community/disko#disko -- \
-  --mode destroy,format,mount \
-  --flake .#Ivaldi
+nix run github:nix-community/nixos-anywhere -- \
+  --flake .#Ivaldi --build-on local --phases disko,install \
+  --ssh-option HostKeyAlias=ivaldi-installer \
+  --generate-hardware-config nixos-generate-config /tmp/ivaldi-hardware.nix \
+  --target-host nixos@<ivaldi-ip>
 
-# The live ISO does not yet have Ivaldi's Numtide cache settings.
-# nixos-install prompts for the root password (console only; root SSH is off).
-sudo nixos-install --flake .#Ivaldi --root /mnt \
-  --option extra-substituters https://cache.numtide.com \
-  --option extra-trusted-public-keys 'niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g='
-sudo nixos-enter --root /mnt -c 'passwd druce'
-cd /
-sudo umount -R /mnt
-sudo reboot
+ssh -t -o HostKeyAlias=ivaldi-installer nixos@<ivaldi-ip> \
+  "sudo nixos-enter --root /mnt -c 'passwd druce'"
+ssh -o HostKeyAlias=ivaldi-installer nixos@<ivaldi-ip> \
+  'sudo umount -R /mnt && sudo reboot'
 ```
+
+Merge `/tmp/ivaldi-hardware.nix` into `modules/nixos/ivaldi/hardware.nix`
+when it differs, and commit. The root password stays unset; `sudo` covers it.
 
 ## First boot
 
-Find the address on the console (`ip -4 addr`), then `ssh druce@<ivaldi-ip>`
-from Thor. Clone a persistent checkout and merge the real hardware config:
+Remove the USB, then `ssh druce@<ivaldi-ip>` from Thor. Clone a persistent
+checkout:
 
 ```sh
 git clone <repo-url> "$HOME/everything-nix"
-cd "$HOME/everything-nix"
-# Copy everything except filesystem and swap entries (disko owns those)
-# into modules/nixos/ivaldi/hardware.nix:
-sudo nixos-generate-config --show-hardware-config
-sudo nixos-rebuild switch --flake .#Ivaldi
 ```
 
 Stow dotfiles from their separate repository: `stow -t ~ <package>`.
