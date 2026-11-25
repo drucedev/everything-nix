@@ -11,6 +11,9 @@ Status: Accepted
 ## Decision
 
 - Druce's user lingers, so the unit survives logout and starts at boot.
+- Ivaldi uses the upstream CLI/server output so Numtide can supply a prebuilt
+  package. Only Thor needs the local transcription patch, which changes the
+  store path and prevents reuse of that upstream build.
 - `t3` puts provider CLIs only on its own PATH. Shells and the user unit need
   them, so they are installed system-wide.
 - T3 downloads a headless Chrome that is not a Nix binary, and `t3 browser

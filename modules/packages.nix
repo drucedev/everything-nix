@@ -40,7 +40,7 @@ let
       ai.open-code-review
     ];
 
-  t3code =
+  t3codeWithTranscription =
     pkgs:
     let
       system = pkgs.stdenv.hostPlatform.system;
@@ -66,7 +66,7 @@ let
   ivaldiAgentPackages =
     pkgs:
     let
-      t3 = t3code pkgs;
+      t3 = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.t3code;
     in
     agentTools pkgs
     ++ [
@@ -104,7 +104,7 @@ let
       ai.grok-bot
       ai.beads
       ai.beads-viewer
-      (ai.t3code-desktop.override { t3code = t3code pkgs; })
+      (ai.t3code-desktop.override { t3code = t3codeWithTranscription pkgs; })
     ]
     ++ agentTools pkgs;
 

@@ -38,8 +38,11 @@ sudo nix run github:nix-community/disko#disko -- \
   --mode destroy,format,mount \
   --flake .#Ivaldi
 
+# The live ISO does not yet have Ivaldi's Numtide cache settings.
 # nixos-install prompts for the root password (console only; root SSH is off).
-sudo nixos-install --flake .#Ivaldi --root /mnt
+sudo nixos-install --flake .#Ivaldi --root /mnt \
+  --option extra-substituters https://cache.numtide.com \
+  --option extra-trusted-public-keys 'niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g='
 sudo nixos-enter --root /mnt -c 'passwd druce'
 cd /
 sudo umount -R /mnt
