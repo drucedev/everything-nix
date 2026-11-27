@@ -23,7 +23,8 @@ with the host or with T3's agents.
   refuses sign-in until a dashboard auth provider is configured.
 - The `hermes-agent` input supplies the module and package. The llm-agents
   package lacks the prebuilt Webapp and the attributes the module needs, so
-  Hermes builds on Thor instead of coming from Numtide's cache.
+  Hermes builds on Thor instead of coming from Numtide's cache. Thor's Hermes
+  Desktop comes from the same input, so the app and the gateway match.
 - Secrets live in `/var/lib/hermes-secrets/env` inside the container, root
   only, outside the service's writable paths. agenix decrypts on the host as
   root, which the container's mapped root cannot read.

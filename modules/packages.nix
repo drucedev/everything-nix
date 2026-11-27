@@ -106,6 +106,7 @@ let
       ai.beads
       ai.beads-viewer
       (ai.t3code-desktop.override { t3code = t3codeWithTranscription pkgs; })
+      inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.desktop
     ]
     ++ agentTools pkgs;
 
