@@ -23,6 +23,10 @@ only through the `sudo` password.
   cannot raise the service's privileges.
 - `agent` uses the host Nix daemon as an untrusted user, so projects can use
   devShells and direnv.
+- The flake declares the memory protection that `t3 service protect` would
+  write through `sudo`: `agent` cannot use `sudo`, and NixOS owns
+  `/etc/systemd`. The per-user units name `agent`'s UID, so it is pinned to
+  1001. `DefaultOOMScoreAdjust=200` applies to every user manager.
 - A dedicated user was chosen over a NixOS container or microVM: it keeps
   T3's own service management and needs no port forwarding or separate store.
 

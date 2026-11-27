@@ -42,6 +42,7 @@
       users.groups.agent = { };
       users.users.agent = {
         isNormalUser = true;
+        uid = 1001;
         description = "T3 Code and coding agents";
         group = "agent";
         homeMode = "770";
@@ -100,6 +101,12 @@
 
       systemd.user.extraConfig = ''
         DefaultEnvironment=PATH=/run/wrappers/bin:/run/current-system/sw/bin:/usr/bin:/bin NIX_LD=/run/current-system/sw/share/nix-ld/lib/ld.so NIX_LD_LIBRARY_PATH=/run/current-system/sw/share/nix-ld/lib
+        DefaultOOMScoreAdjust=200
+      '';
+
+      environment.etc."systemd/user/init.scope.d/90-memory-low.conf".text = ''
+        [Scope]
+        MemoryLow=256M
       '';
 
       systemd.user.services.t3code = {
@@ -108,7 +115,31 @@
           Environment = [ "T3CODE_PORT=3773" ];
           NoNewPrivileges = true;
           UMask = "0007";
+          OOMScoreAdjust = -900;
         };
       };
+
+      systemd.slices.user.sliceConfig.MemoryLow = "2G";
+      systemd.slices.system = {
+        overrideStrategy = "asDropin";
+        sliceConfig.MemoryLow = "512M";
+      };
+      systemd.slices."user-1001" = {
+        overrideStrategy = "asDropin";
+        sliceConfig.MemoryLow = "2G";
+      };
+      systemd.services."user@1001" = {
+        overrideStrategy = "asDropin";
+        serviceConfig = {
+          MemoryLow = "2G";
+          OOMScoreAdjust = -900;
+        };
+      };
+      systemd.services.sshd.serviceConfig = {
+        MemoryLow = "256M";
+        OOMScoreAdjust = -900;
+      };
+
+      systemd.user.slices.app.sliceConfig.MemoryLow = "1536M";
     };
 }
