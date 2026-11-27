@@ -2,7 +2,8 @@
 
 Headless NixOS home server, x86_64-linux: UEFI, GPT with an ESP, systemd-boot.
 It carries the shared CLI baseline plus `tmux`, `age`, Pi, Claude Code, Open
-Code Review (`ocr`), and the T3 Code server (`t3`) with its provider CLIs.
+Code Review (`ocr`), the T3 Code server (`t3`) with its provider CLIs, and
+Hermes Agent in a NixOS container.
 
 ## Before the installer
 
@@ -144,6 +145,56 @@ T3's headless Chrome runs through nix-ld instead of `t3 browser setup`. If a
 browser tab names a missing library, add it to `programs.nix-ld.libraries` and
 rebuild. Keep the browser sandbox on unless it is itself the blocker
 (`T3CODE_SERVER_BROWSER_SANDBOX=0`).
+
+## Hermes Agent
+
+Hermes runs in the container `hermes` with its own LAN address
+([ADR 16](adr/0016-run-hermes-in-a-nixos-container-on-ivaldi.md)). Ivaldi
+itself cannot reach that address; use another LAN machine to test it.
+
+After the first rebuild, read the container's MAC address, reserve an address
+for it in UniFi, and add the Local DNS Record `hermes.lan`:
+
+```sh
+sudo nixos-container run hermes -- ip -br link show mv-enp1s0
+sudo nixos-container run hermes -- ip -br addr show mv-enp1s0
+```
+
+Secrets go into one root-only file inside the container: the dashboard
+sign-in, provider keys, and bot tokens.
+
+```sh
+sudo nixos-container root-login hermes
+install -d -m 700 /var/lib/hermes-secrets
+(umask 077; ${EDITOR:-nano} /var/lib/hermes-secrets/env)
+exit
+sudo systemctl restart container@hermes   # merges the file into Hermes' .env
+```
+
+The Webapp needs a sign-in before it accepts LAN clients:
+
+```sh
+HERMES_DASHBOARD_BASIC_AUTH_USERNAME=druce
+HERMES_DASHBOARD_BASIC_AUTH_PASSWORD=<strong password>
+HERMES_DASHBOARD_BASIC_AUTH_SECRET=<output of: openssl rand -base64 32>
+```
+
+Add the model provider key (for example `OPENROUTER_API_KEY=`) and bot tokens
+(for example `TELEGRAM_BOT_TOKEN=`) to the same file. Model and platform
+settings go in `services.hermes-agent.settings` in
+`modules/nixos/ivaldi/hermes.nix`; Hermes blocks `hermes setup` and
+`hermes config set` under NixOS.
+
+Open `http://hermes.lan:9120` in a browser. In Hermes Desktop, add a Remote
+gateway with the same URL under Settings → Gateways. Inspect the service from
+inside the container:
+
+```sh
+sudo nixos-container root-login hermes
+systemctl status hermes-agent
+journalctl -u hermes-agent -f
+sudo -u hermes hermes webapp --status
+```
 
 ## Secrets
 

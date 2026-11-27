@@ -22,6 +22,10 @@
 
     llm-agents.url = "github:numtide/llm-agents.nix";
 
+    hermes-agent.url = "github:NousResearch/hermes-agent";
+    hermes-agent.inputs.flake-parts.follows = "flake-parts";
+    hermes-agent.inputs.home-manager.follows = "";
+
   };
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
