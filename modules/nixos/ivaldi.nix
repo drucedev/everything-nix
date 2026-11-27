@@ -104,10 +104,13 @@
         DefaultOOMScoreAdjust=200
       '';
 
-      environment.etc."systemd/user/init.scope.d/90-memory-low.conf".text = ''
-        [Scope]
-        MemoryLow=256M
-      '';
+      systemd.user.units."init.scope" = {
+        overrideStrategy = "asDropin";
+        text = ''
+          [Scope]
+          MemoryLow=256M
+        '';
+      };
 
       systemd.user.services.t3code = {
         overrideStrategy = "asDropin";
