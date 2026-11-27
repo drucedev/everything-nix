@@ -2,7 +2,7 @@
 
 Date: 2026-11-22
 
-Status: Accepted
+Status: Accepted; the service user is amended by ADR 15
 
 ## Context
 
@@ -10,7 +10,7 @@ Status: Accepted
 
 ## Decision
 
-- Druce's user lingers, so the unit survives logout and starts at boot.
+- The service user lingers, so the unit survives logout and starts at boot.
 - Ivaldi uses the upstream CLI/server output so Numtide can supply a prebuilt
   package. Only Thor needs the local transcription patch, which changes the
   store path and prevents reuse of that upstream build.

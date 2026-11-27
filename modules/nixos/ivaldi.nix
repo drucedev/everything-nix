@@ -33,10 +33,20 @@
       i18n.defaultLocale = "en_US.UTF-8";
 
       users.users.druce = {
-        linger = true;
+        extraGroups = [ "agent" ];
         openssh.authorizedKeys.keys = [
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPH75Me4yVpJkd6cB1LLGibTID5yHMLtPvCM9qgGtpM7 druce@thor"
         ];
+      };
+
+      users.groups.agent = { };
+      users.users.agent = {
+        isNormalUser = true;
+        description = "T3 Code and coding agents";
+        group = "agent";
+        homeMode = "770";
+        linger = true;
+        shell = pkgs.bashInteractive;
       };
 
       services.openssh = {
@@ -94,7 +104,11 @@
 
       systemd.user.services.t3code = {
         overrideStrategy = "asDropin";
-        serviceConfig.Environment = [ "T3CODE_PORT=3773" ];
+        serviceConfig = {
+          Environment = [ "T3CODE_PORT=3773" ];
+          NoNewPrivileges = true;
+          UMask = "0007";
+        };
       };
     };
 }

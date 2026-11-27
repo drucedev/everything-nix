@@ -104,17 +104,30 @@ This flake owns `t3`; skip the upstream `curl | sh` installer and never run it
 as root. `nixos-rebuild` updates the command, while `t3 update` updates the
 server runtime that `t3 service install` pins under `~/.t3`.
 
-Lingering keeps the user service running after logout and starts it at boot.
+T3 and every agent it starts run as the unprivileged `agent` user
+([ADR 15](adr/0015-run-agents-as-an-unprivileged-user-on-ivaldi.md)), never as
+`druce`. `agent` has no SSH login. Open a full login session for it from
+druce's SSH session. `systemctl --user` needs that session, which
+`sudo -u agent` does not provide:
+
+```sh
+sudo machinectl shell agent@
+```
+
+The lingering user service keeps running after logout and starts at boot.
+Druce can read and write `/home/agent` through the `agent` group, but avoid
+running `git`, `direnv`, or builds as druce inside agent checkouts.
 TCP `3773` is open for LAN pairing only; T3 Connect does not need it, so keep it
 unforwarded on the router.
 
-Authenticate at least one provider over SSH before starting a thread:
+In the `agent` session, authenticate at least one provider before starting a
+thread:
 
 ```sh
 claude auth login
 codex login
 agent login            # Cursor (binary: cursor-agent)
-gh auth login          # so agents can open pull requests
+gh auth login          # fine-grained token, so agents can open pull requests
 pi                     # then /login, for Pi as a provider
 
 t3 up --lan            # LAN access; installs the service
