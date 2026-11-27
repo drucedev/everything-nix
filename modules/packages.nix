@@ -37,6 +37,7 @@ let
     [
       ai.pi
       ai.claude-code
+      ai.codex
       ai.open-code-review
     ];
 
